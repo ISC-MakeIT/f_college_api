@@ -18,6 +18,10 @@
   },
   "homepage": "https://github.com/ISC-MakeIT/f_college_api#readme",
   "dependencies": {
-    "express": "^4.16.3"
+    "eslint": "^5.4.0",
+    "express": "^4.16.3",
+    "http": "0.0.0",
+    "mysql2": "^1.6.1",
+    "path": "^0.12.7"
   }
 }
