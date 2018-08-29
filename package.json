@@ -1,0 +1,23 @@
+{
+  "name": "f_college_api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ISC-MakeIT/f_college_api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ISC-MakeIT/f_college_api/issues"
+  },
+  "homepage": "https://github.com/ISC-MakeIT/f_college_api#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
