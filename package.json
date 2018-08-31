@@ -1,27 +1,18 @@
 {
-  "name": "f_college_api",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "test",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node ./bin/www"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ISC-MakeIT/f_college_api.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ISC-MakeIT/f_college_api/issues"
-  },
-  "homepage": "https://github.com/ISC-MakeIT/f_college_api#readme",
   "dependencies": {
-    "eslint": "^5.4.0",
-    "express": "^4.16.3",
-    "http": "0.0.0",
-    "mysql2": "^1.6.1",
-    "path": "^0.12.7"
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "ejs": "~2.5.7",
+    "express": "~4.16.0",
+    "file-loader": "^2.0.0",
+    "http-errors": "~1.6.2",
+    "morgan": "~1.9.0",
+    "url-loader": "^1.1.1"
   }
 }
