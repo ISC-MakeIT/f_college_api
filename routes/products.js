@@ -1,22 +1,37 @@
 var express = require('express');
 var router = express.Router();
-const mysql = require('mysql');
+const mysql = require('mysql2');
+require('dotenv').config();
 
 
 const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'sample'
+  host: process.env.NODE_DB_HOST,
+  user: process.env.NODE_DB_USER,
+  password: process.env.NODE_DB_PASSWORD,
+  database: process.env.NODE_DB_DATABASE
 });
 
+// ://products
+router.get('/', (req, res, next)=> {
+  res.header('Content-Type', 'text/html; charset=utf-8');
+  res.render('index', { title: 'Express' });
+});
+
+// router.get('/',(req,res,next)=>{
+//   res.header('Content-Type', 'text/html; charset=utf-8');
+//   res.render('index');
+// });
+
+
+
 /* GET users listing. */
-router.get('/', (req, res, next) => {
+// ://products/students
+router.get('/students', (req, res, next) => {
     connection.query('select `photos`.`photo_url`,`students`.`name`, `students`.`major`,`students`.`grade`, `students`.`profile_photo_url`, `products`.`id`, `products`.`genre`, `products`.`title` from `photos`, `products`, `students` where `products`.`id` BETWEEN 1 and 4 and `products`.`id` = `photos`.`product_id` and `students`.`id` = `products`.`representative_student_id`;',(err, row) => {
       console.log(`err: ${err}`);
       console.log(row);
 
-      let  JsonListScreen =[];
+      let  jsonListScreen =[];
       for(let i = 0; i < 7; i++ ) {
         let ObjListScreen = {};
         ObjListScreen.type = row[i].major;      
@@ -26,15 +41,17 @@ router.get('/', (req, res, next) => {
           subject: `${row[i].major} ${row[i].grade}`,
           image_url: row[i].profile_photo_url
         };
-        JsonListScreen.push(ObjListScreen);
+        jsonListScreen.push(ObjListScreen);
       };
 
       res.header("Content-Type", "application/json; charset=utf-8");
-      console.log( JsonListScreen);
-      res.json(JsonListScreen);
+      console.log(jsonListScreen);
+      res.json(jsonListScreen);
     });
 });
 
+
+// ://products/1
 router.get('/:id',(req, res, next) => {
   let id = req.params.id;
   console.log(`id:${id}`);
@@ -43,18 +60,18 @@ router.get('/:id',(req, res, next) => {
     console.log(`err: ${err}`);
 //    console.log(row);
     
-    let JsonDetailScreen = [];
+    let jsonDetailScreen = [];
     let image_url = [];
-    let ObjDetailScreen = {};
-    ObjDetailScreen.id = row[0].id;
-    ObjDetailScreen.concept = row[0].concept;
+    let objDetailScreen = {};
+    objDetailScreen.id = row[0].id;
+    objDetailScreen.concept = row[0].concept;
     for (let y = 0; y < row.length; y++) {
       image_url.push(row[y].photo_url);
       
     }
 //    console.log(row[0].photo_url);
-    ObjDetailScreen.sub_image_urls = image_url;
-    JsonDetailScreen.push(ObjDetailScreen);
+    objDetailScreen.sub_image_urls = image_url;
+    jsonDetailScreen.push(objDetailScreen);
 
     connection.query('SELECT `students`.`name`, `students`.`major`, `students`.`grade`, `students`.`profile_photo_url`,`students`.`message` FROM `students` WHERE `students`.`id` IN (SELECT `product_menbers`.`student_id` FROM `product_menbers` WHERE `product_menbers`.`product_id` = ?);',[id], (err,row) => {
       console.log(`err:${err}`);
@@ -68,7 +85,7 @@ router.get('/:id',(req, res, next) => {
       owner.image_url = row[0].profile_photo_url;
       console.log(row.length);
       
-      ObjDetailScreen.owner = owner;
+      objDetailScreen.owner = owner;
       for(let t = 1; t < row.length; t++) {
         member.name = row[t].name;
         member.subject = `${row[t].major} ${row[t].grade}`;
@@ -77,12 +94,12 @@ router.get('/:id',(req, res, next) => {
         ary.push(member);
         member = {};
       }
-      ObjDetailScreen.member = ary;
-      console.log(ObjDetailScreen);
+      objDetailScreen.member = ary;
+      console.log(objDetailScreen);
 
       res.header("Content-Type", "application/json; charset=utf-8");
-      console.log( JsonDetailScreen);
-      res.json(JsonDetailScreen);
+      console.log( jsonDetailScreen);
+      res.json(jsonDetailScreen);
     });
   });
 });
