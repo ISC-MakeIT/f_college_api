@@ -31,17 +31,17 @@ router.get('/students', (req, res, next) => {
       console.log(`err: ${err}`);
       console.log(row);
 
-      let  jsonListScreen =[];
-      for(let i = 0; i < 7; i++ ) {
-        let ObjListScreen = {};
-        ObjListScreen.type = row[i].major;      
-        ObjListScreen.image_url = row[i].photo_url;
-        ObjListScreen.owner = {
+      const  jsonListScreen =[];
+      for(let i = 0; i < row.length; i++ ) {
+        let objListScreen = {};
+        objListScreen.type = row[i].major;      
+        objListScreen.image_url = row[i].photo_url;
+        objListScreen.owner = {
           name: row[i].name,
           subject: `${row[i].major} ${row[i].grade}`,
           image_url: row[i].profile_photo_url
         };
-        jsonListScreen.push(ObjListScreen);
+        jsonListScreen.push(objListScreen);
       };
 
       res.header("Content-Type", "application/json; charset=utf-8");
@@ -58,10 +58,10 @@ router.get('/:id',(req, res, next) => {
   
   connection.query('SELECT `products`.`id`, `products`.`concept`, `photos`.`photo_url` FROM `products`, `photos` WHERE `products`.`id` = `photos`.`product_id` AND `products`.`id` = ?;',[id],(err, row) => {
     console.log(`err: ${err}`);
-//    console.log(row);
+    console.log(row);
     
-    let jsonDetailScreen = [];
-    let image_url = [];
+    const jsonDetailScreen = [];
+    const image_url = [];
     let objDetailScreen = {};
     objDetailScreen.id = row[0].id;
     objDetailScreen.concept = row[0].concept;
@@ -78,7 +78,7 @@ router.get('/:id',(req, res, next) => {
       console.log(row);
       let owner = {};
       let member = {};
-      let ary = [];
+      const ary = [];
       owner.name = row[0].name;
       owner.subject = `${row[0].major} ${row[0].grade}`;
       owner.message = row[0].message;
