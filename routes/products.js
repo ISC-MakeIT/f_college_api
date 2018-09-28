@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+let express = require('express');
+let router = express.Router();
 const mysql = require('mysql2');
 require('dotenv').config();
 
@@ -12,17 +12,16 @@ const connection = mysql.createConnection({
 });
 
 // ://products
-router.get( '/' , ( req , res , next ) => {
+router.get( '/' , ( req , res) => {
     let select = '`photos`.`photo_url`,`students`.`name`, `students`.`major`,`students`.`grade`, `students`.`profile_photo_url`, `products`.`id`, `products`.`genre`, `products`.`title`';
     let from = '`photos`, `products`, `students`';
     let where = '`products`.`id` = `photos`.`product_id` and `students`.`id` = `products`.`representative_student_id`';
     connection.query( `select ${ select } from ${ from } where ${ where };` , ( err , row ) => {
-        console.error( err );
         const  jsonListScreen = [];
         for ( let obj of row ) {
             let objListScreen = {};
             objListScreen = {
-                type : obj.major,      
+                type : obj.major,
                 image_url : obj.photo_url,
                 owner : {
                     name : obj.name,
@@ -37,13 +36,12 @@ router.get( '/' , ( req , res , next ) => {
     });
 });
 
-router.get ( '/:id', ( req , res , next ) => {
-    let id = req.params.id;  
+router.get ( '/:id', ( req , res ) => {
+    let id = req.params.id;
     let select = '`products`.`id`, `products`.`concept`, `photos`.`photo_url`';
     let from = '`products`, `photos`';
     let where = '`products`.`id` = `photos`.`product_id` AND `products`.`id` = ?';
     connection.query(`SELECT ${ select } FROM ${ from } WHERE ${ where };` , [id] , ( err , row ) => {
-        console.error( err );
         const jsonDetailScreen = [];
         const image_url = [];
         let objDetailScreen = {};
@@ -63,7 +61,6 @@ router.get ( '/:id', ( req , res , next ) => {
         let fromSub = '`students`';
         let whereSub = '`students`.`id` IN (SELECT `product_menbers`.`student_id` FROM `product_menbers` WHERE `product_menbers`.`product_id` = ?)';
         connection.query(`SELECT ${ selectSub } FROM ${ fromSub } WHERE ${ whereSub };` , [id] , ( err , row ) => {
-            console.error( err );
             let owner = {};
             let member = {};
             const ary = [];
@@ -86,10 +83,9 @@ router.get ( '/:id', ( req , res , next ) => {
             }
             objDetailScreen.member = ary;
             res.header( 'Content-Type', 'application/json; charset=utf-8' );
-            console.log( jsonDetailScreen );
             res.json( jsonDetailScreen );
         });
     });
 });
-  
+
 module.exports = router;
