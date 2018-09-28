@@ -1,0 +1,30 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:10.7.0
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          key: npm-{{ .Branch }}-{{ checksum "yarn.lock"}}
+
+      - run:
+          name: yarn install
+          command: yarn install
+
+      - save_cache:
+          key: npm-{{ .Branch }}-{{ checksum "yarn.lock"}}
+          paths:
+            - node_modules
+
+      - run:
+        name: eslint
+        command: npx eslint ./routes/**/*.js
+
