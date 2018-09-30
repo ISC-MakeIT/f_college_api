@@ -21,7 +21,7 @@ router.get( '/' , ( req , res) => {
         for ( let obj of row ) {
             let objListScreen = {};
             objListScreen = {
-                type : obj.major,
+                type : obj.genre,
                 image_url : obj.photo_url,
                 owner : {
                     name : obj.name,
