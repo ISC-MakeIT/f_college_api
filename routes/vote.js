@@ -24,7 +24,24 @@ const connection = mysql.createConnection({
     let where = '`products`.`representative_student_id` = `students`.`id` AND `products`.`id`';
     let sub = 'IN (SELECT `vote`.`product_id` FROM `vote` WHERE `vote`.`product_id` IN (SELECT `vote`.`product_id` FROM `vote` WHERE `vote`.`id` = ? ))';
     connection.query(`SELECT ${select} FROM ${from} WHERE ${where} ${sub}`, [id] , ( err, row ) => {
-
-    })
+        console.error(err);        
+        const jsonVote = [];
+        let vote = {};
+        for ( let obj of row ) {
+            vote = {
+                id : obj.id,
+                genre : obj.genre,
+                concept : obj.concept,
+                owner : {
+                    name : obj.name,
+                    subject : `${obj.major} ${obj.grade}`,
+                    image_url : obj.profile_photo_url
+                }
+            };
+            jsonVote.push(vote);
+        };
+        res.header( "Content-Type", "application/json; charset=utf-8" );
+        res.json( jsonVote );
+    });
   });
 module.exports = router;
