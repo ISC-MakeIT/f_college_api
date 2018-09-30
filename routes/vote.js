@@ -19,7 +19,7 @@ const connection = mysql.createConnection({
   //投票ページ
   router.get( '/user/:id' , (req , res , next ) => {
     let id = req.params.id;
-    let select = '`students`.`name`, `students`.`grade`, `students`.`major`, `products`.`concept`, `products`.`genre`, `products`.`id`';
+    let select = '`students`.`name`, `students`.`grade`, `students`.`major`, `products`.`concept`, `products`.`genre`, `products`.`id`, `students`.`profile_photo_url`';
     let from = '`students`, `products`';
     let where = '`products`.`representative_student_id` = `students`.`id` AND `products`.`id`';
     let sub = 'IN (SELECT `vote`.`product_id` FROM `vote` WHERE `vote`.`product_id` IN (SELECT `vote`.`product_id` FROM `vote` WHERE `vote`.`id` = ? ))';
