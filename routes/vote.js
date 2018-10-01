@@ -9,6 +9,7 @@ const connection = mysql.createConnection({
   });
 
   //投票
+  //localhost:3000/api/vote/product/:id
   router.get( '/product/:id' , (req , res , next ) => {
     let id = req.params.id;
     connection.query('', [id] , ( err, row ) => {
@@ -17,6 +18,7 @@ const connection = mysql.createConnection({
   });
 
   //投票ページ
+  //localhost:3000/api/vote/user/:id
   router.get( '/user/:id' , (req , res , next ) => {
     let id = req.params.id;
     let select = '`students`.`name`, `students`.`grade`, `students`.`major`, `products`.`concept`, `products`.`genre`, `products`.`id`, `students`.`profile_photo_url`';

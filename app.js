@@ -22,6 +22,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', TopRouter);
 app.use('/api/products', ProductsRouter);
+// app.use('/api/products/:id/vote', VoteRouter);
 app.use('/api/vote' , vote);
 
 // catch 404 and forward to error handler
