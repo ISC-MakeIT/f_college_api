@@ -1,13 +1,11 @@
-let createError = require('http-errors');
-let express = require('express');
-let path = require('path');
-let cookieParser = require('cookie-parser');
-let logger = require('morgan');
-
-let TopRouter = require('./routes/top');
-let ProductsRouter = require('./routes/products');
-
-let app = express();
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const TopRouter = require('./routes/top');
+const ProductsRouter = require('./routes/products');
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
