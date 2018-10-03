@@ -1,5 +1,8 @@
 let express = require('express');
-let router = express.Router();
+let router = express.Router({mergeParams: true});
+const mysql = require('mysql');
+
+
 
 const connection = mysql.createConnection({
     host: process.env.NODE_DB_HOST,
@@ -8,24 +11,41 @@ const connection = mysql.createConnection({
     database: process.env.NODE_DB_DATABASE
   });
 
-  //投票
-  //localhost:3000/api/vote/product/:id
-  router.get( '/product/:id' , (req , res , next ) => {
-    let id = req.params.id;
-    connection.query('', [id] , ( err, row ) => {
-
-    })
-  });
-
   //投票ページ
-  //localhost:3000/api/vote/user/:id
-  router.get( '/user/:id' , (req , res , next ) => {
-    let id = req.params.id;
-    let select = '`students`.`name`, `students`.`grade`, `students`.`major`, `products`.`concept`, `products`.`genre`, `products`.`id`, `students`.`profile_photo_url`';
-    let from = '`students`, `products`';
-    let where = '`products`.`representative_student_id` = `students`.`id` AND `products`.`id`';
-    let sub = 'IN (SELECT `vote`.`product_id` FROM `vote` WHERE `vote`.`product_id` IN (SELECT `vote`.`product_id` FROM `vote` WHERE `vote`.`id` = ? ))';
-    connection.query(`SELECT ${select} FROM ${from} WHERE ${where} ${sub}`, [id] , ( err, row ) => {
+  router.get( '/' , (req , res , next ) => {
+    let sql = "\
+        SELECT\
+            `students`.`name`,\
+            `students`.`grade`,\
+            `students`.`major`,\
+            `products`.`concept`,\
+            `products`.`genre`,\
+            `products`.`id`,\
+            `students`.`profile_photo_url`\
+        FROM\
+            `students`, `products`\
+        WHERE\
+            `products`.`representative_student_id` = `students`.`id`\
+        AND\
+            `products`.`id`\
+        IN(\
+            SELECT\
+                `vote`.`product_id`\
+            FROM\
+                `vote`\
+            WHERE\
+                `vote`.`product_id`\
+            IN (\
+                SELECT\
+                    `vote`.`product_id`\
+                FROM\
+                    `vote`\
+                WHERE\
+                    `vote`.`id` = ?\
+            )\
+        )";
+
+    connection.query( sql , [id] , ( err, row ) => {
         console.error(err);        
         const jsonVote = [];
         let vote = {};

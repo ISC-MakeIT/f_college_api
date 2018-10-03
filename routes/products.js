@@ -1,8 +1,9 @@
 let express = require('express');
 let router = express.Router();
 const mysql = require('mysql2');
-require('dotenv').config();
+const vote = require('./vote');
 
+router.use('/:id/vote' , vote );
 
 const connection = mysql.createConnection({
     host: process.env.NODE_DB_HOST,
@@ -11,17 +12,17 @@ const connection = mysql.createConnection({
     database: process.env.NODE_DB_DATABASE
 });
 
-// ://products
-router.get( '/' , ( req , res) => {
+router.get( '/' , ( req , res , next ) => {
     let select = '`photos`.`photo_url`,`students`.`name`, `students`.`major`,`students`.`grade`, `students`.`profile_photo_url`, `products`.`id`, `products`.`genre`, `products`.`title`';
     let from = '`photos`, `products`, `students`';
     let where = '`products`.`id` = `photos`.`product_id` and `students`.`id` = `products`.`representative_student_id`';
     connection.query( `select ${ select } from ${ from } where ${ where };` , ( err , row ) => {
+        console.error( err );    
         const  jsonListScreen = [];
         for ( let obj of row ) {
             let objListScreen = {};
             objListScreen = {
-                type : obj.genre,
+                type : obj.major,
                 image_url : obj.photo_url,
                 owner : {
                     name : obj.name,
@@ -36,12 +37,13 @@ router.get( '/' , ( req , res) => {
     });
 });
 
-router.get ( '/:id', ( req , res ) => {
+router.get ( '/:id', ( req , res , next ) => {
     let id = req.params.id;
     let select = '`products`.`id`, `products`.`concept`, `photos`.`photo_url`';
     let from = '`products`, `photos`';
     let where = '`products`.`id` = `photos`.`product_id` AND `products`.`id` = ?';
     connection.query(`SELECT ${ select } FROM ${ from } WHERE ${ where };` , [id] , ( err , row ) => {
+        console.error( err );
         const jsonDetailScreen = [];
         const image_url = [];
         let objDetailScreen = {};
@@ -61,6 +63,7 @@ router.get ( '/:id', ( req , res ) => {
         let fromSub = '`students`';
         let whereSub = '`students`.`id` IN (SELECT `product_menbers`.`student_id` FROM `product_menbers` WHERE `product_menbers`.`product_id` = ?)';
         connection.query(`SELECT ${ selectSub } FROM ${ fromSub } WHERE ${ whereSub };` , [id] , ( err , row ) => {
+            console.error( err );
             let owner = {};
             let member = {};
             const ary = [];

@@ -6,7 +6,6 @@ let logger = require('morgan');
 
 let TopRouter = require('./routes/top');
 let ProductsRouter = require('./routes/products');
-let vote = require('./routes/vote');
 
 let app = express();
 
@@ -22,8 +21,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', TopRouter);
 app.use('/api/products', ProductsRouter);
-// app.use('/api/products/:id/vote', VoteRouter);
-app.use('/api/vote' , vote);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
