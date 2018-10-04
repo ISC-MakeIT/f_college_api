@@ -12,8 +12,7 @@ const connection = mysql.createConnection({
 
 // =>app.use('/api/:id/like', LikeRouter);
 
-
-router.get('/', (err,req,res,next)=>{
+router.get('/', (err, req, res) => {
     res.send('like');
 });
 

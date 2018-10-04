@@ -7,7 +7,6 @@ const logger = require('morgan');
 const app = express();
 
 // application settings
-const LikeRouter = express.Router({mergeParams: true});
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(logger('dev'));
@@ -16,19 +15,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // ルーティング先
 const TopRouter = require('./routes/top.js');
-app.use('/api/', TopRouter);
+app.use('/', TopRouter);
 
 const ProductsRouter = require('./routes/products/products.js');
 app.use('/api/products', ProductsRouter);
 
-const VoteRouter = require('./routes/vote/vote.js',);
+const VoteRouter = require('./routes/vote/vote.js');
 app.use('/api/vote', VoteRouter);
 
-const LikeRouter = require('./routes/like/like.js',);
+const MyDataRouter = require('./routes/user/mydata.js');
+app.use('/api/mydata', MyDataRouter);
+
+const LikeRouter = require('./routes/like/like.js');
 app.use('/api/:id/like', LikeRouter);
 
-const MyDataRouter = require('./routes/user/my_data.js',);
-app.use('/api/mydata', MyDataRouter);
 
 
 // catch 404 and forward to error handler
