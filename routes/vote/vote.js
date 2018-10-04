@@ -1,5 +1,7 @@
-let express = require('express');
-let router = express.Router({mergeParams: true});
+const express = require('express');
+const router = express.Router({
+    mergeParams: true
+});
 const mysql = require('mysql2');
 require('dotenv').config();
 
@@ -8,10 +10,10 @@ const connection = mysql.createConnection({
     user: process.env.NODE_DB_USER,
     password: process.env.NODE_DB_PASSWORD,
     database: process.env.NODE_DB_DATABASE
-  });
+});
 
-  //投票ページ
-  router.get( '/' , (req , res , next ) => {
+//投票ページ
+router.get('/', (req, res, next) => {
     const id = req.params.id;
     const sql = "\
         SELECT\
@@ -45,25 +47,25 @@ const connection = mysql.createConnection({
             )\
         )";
 
-    connection.query( sql , [id] , ( err, row ) => {
-        console.error(err);        
+    connection.query(sql, [id], (err, row) => {
+        console.error(err);
         const jsonVote = [];
         let vote = {};
-        for ( let obj of row ) {
+        for (let obj of row) {
             vote = {
-                id : obj.id,
-                genre : obj.genre,
-                concept : obj.concept,
-                owner : {
-                    name : obj.name,
-                    subject : `${obj.major} ${obj.grade}`,
-                    image_url : obj.profile_photo_url
+                id: obj.id,
+                genre: obj.genre,
+                concept: obj.concept,
+                owner: {
+                    name: obj.name,
+                    subject: `${obj.major} ${obj.grade}`,
+                    image_url: obj.profile_photo_url
                 }
             };
             jsonVote.push(vote);
         };
-        res.header( "Content-Type", "application/json; charset=utf-8" );
-        res.json( jsonVote );
+        res.header("Content-Type", "application/json; charset=utf-8");
+        res.json(jsonVote);
     });
-  });
+});
 module.exports = router;
