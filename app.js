@@ -16,7 +16,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // ルーティング先
 const TopRouter = require('./routes/top.js');
-app.use('/', TopRouter);
+app.use('/api/', TopRouter);
 
 const ProductsRouter = require('./routes/products/products.js');
 app.use('/api/products', ProductsRouter);
