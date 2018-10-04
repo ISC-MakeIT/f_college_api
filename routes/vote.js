@@ -1,8 +1,7 @@
 let express = require('express');
 let router = express.Router({mergeParams: true});
-const mysql = require('mysql');
-
-
+const mysql = require('mysql2');
+require('dotenv').config();
 
 const connection = mysql.createConnection({
     host: process.env.NODE_DB_HOST,
@@ -13,6 +12,7 @@ const connection = mysql.createConnection({
 
   //投票ページ
   router.get( '/' , (req , res , next ) => {
+    const id = req.params.id;
     const sql = "\
         SELECT\
             `students`.`name`,\
@@ -41,7 +41,7 @@ const connection = mysql.createConnection({
                 FROM\
                     `vote`\
                 WHERE\
-                    `vote`.`id` = ?\
+                    `vote`.`voter_id` = ?\
             )\
         )";
 

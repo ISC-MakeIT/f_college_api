@@ -1,7 +1,8 @@
-const express = require('express');
-const router = express.Router();
+let express = require('express');
+let router = express.Router();
 const mysql = require('mysql2');
 const vote = require('./vote');
+require('dotenv').config();
 
 router.use('/:id/vote' , vote );
 
@@ -16,7 +17,11 @@ router.get( '/' , ( req , res , next ) => {
     let select = '`photos`.`photo_url`,`students`.`name`, `students`.`major`,`students`.`grade`, `students`.`profile_photo_url`, `products`.`id`, `products`.`genre`, `products`.`title`';
     let from = '`photos`, `products`, `students`';
     let where = '`products`.`id` = `photos`.`product_id` and `students`.`id` = `products`.`representative_student_id`';
-    connection.query( `select ${ select } from ${ from } where ${ where };` , ( err , row ) => {
+
+    const sql = "\
+        SELECT\
+        `photos`.`photo_url`,"
+    connection.query("sql" `select ${ select } from ${ from } where ${ where };` , ( err , row ) => {
         console.error( err );    
         const  jsonListScreen = [];
         for ( let obj of row ) {
