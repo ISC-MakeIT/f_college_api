@@ -25,6 +25,6 @@ jobs:
             - node_modules
 
       - run:
-        name: eslint
-        command: npx eslint ./routes/**/*.js
+          name: eslint
+          command: npx eslint ./routes/**/*.js
 
