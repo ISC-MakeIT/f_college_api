@@ -13,7 +13,7 @@ const connection = mysql.createConnection({
 
   //投票ページ
   router.get( '/' , (req , res , next ) => {
-    let sql = "\
+    const sql = "\
         SELECT\
             `students`.`name`,\
             `students`.`grade`,\
