@@ -11,8 +11,9 @@ const connection = mysql.createConnection({
 });
 
 router.get('/', (req, res, next) => {
-    let select = 'photos.photo_url , students.name , students.major , students.grade ,  students.profile_photo_url , products.id , products.genre , products.title';
-    let from = 'photos , products , students';
+    //この辺のSQLをもっと上手く書きたい
+    let select = 'photos.photo_url, students.name, students.major, students.grade, students.profile_photo_url, products.id, products.genre, products.title';
+    let from = 'photos, products, students';
     let where = 'products.id = photos.product_id and students.id = products.representative_student_id';
 
     connection.query(`SELECT ${select} FROM ${from} WHERE ${where}`, (err, row) => {
@@ -24,7 +25,7 @@ router.get('/', (req, res, next) => {
                 image_url: obj.photo_url,
                 owner: {
                     name: obj.name,
-                    subject: `${ obj.major } ${ obj.grade }`,
+                    subject: `${obj.major} ${obj.grade}`,
                     image_url: obj.profile_photo_url
                 }
             };
@@ -36,10 +37,10 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/:id', (req, res, next) => {
-    let id = req.params.id;
-    let select = 'products.id , products.concept , photos.photo_url';
-    let from = 'products , photos';
-    let where = 'products . id =  photos . product_id AND products.id = ?';
+    const id = req.params.id;
+    const select = 'products.id, products.concept, photos.photo_url';
+    const from = 'products, photos';
+    const where = 'products . id =  photos . product_id AND products.id = ?';
 
     connection.query(`SELECT ${select} FROM ${from} WHERE ${where}`, [id], (err, row) => {
         const jsonDetailScreen = [];
@@ -57,7 +58,7 @@ router.get('/:id', (req, res, next) => {
         };
         jsonDetailScreen.push(objDetailScreen);
 
-        let selectSub = 'students.name , students.major , students.grade , students.profile_photo_url , students . message';
+        let selectSub = 'students.name, students.major, students.grade, students.profile_photo_url, students.message';
         let fromSub = 'students';
         let whereSub = 'students.id IN (SELECT product_menbers.student_id FROM product_menbers WHERE product_menbers.product_id = ?)';
         connection.query(`SELECT ${ selectSub } FROM ${ fromSub } WHERE ${ whereSub };`, [id], (err, row) => {
@@ -66,7 +67,7 @@ router.get('/:id', (req, res, next) => {
             const ary = [];
             owner = {
                 name: row[0].name,
-                subject: `${ row[0].major } ${ row[0].grade }`,
+                subject: `${row[0].major} ${row[0].grade}`,
                 message: row[0].message,
                 image_url: row[0].profile_photo_url
             };
