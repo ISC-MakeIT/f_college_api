@@ -10,13 +10,27 @@ const connection = mysql.createConnection({
     database: process.env.NODE_DB_DATABASE
 });
 
-router.get('/', (req, res, next) => {
-    //この辺のSQLをもっと上手く書きたい
-    let select = 'photos.photo_url, students.name, students.major, students.grade, students.profile_photo_url, products.id, products.genre, products.title';
-    let from = 'photos, products, students';
-    let where = 'products.id = photos.product_id and students.id = products.representative_student_id';
+router.get('/', (req, res) => {
+    const sql = '\
+        SELECT\
+            photos.photo_url,\
+            students.name,\
+            students.major,\
+            students.grade,\
+            students.profile_photo_url,\
+            products.id,\
+            products.genre,\
+            products.title\
+        FROM\
+            photos,\
+            products,\
+            students\
+        WHERE\
+            products.id = photos.product_id\
+        AND\
+            students.id = products.representative_student_id';
 
-    connection.query(`SELECT ${select} FROM ${from} WHERE ${where}`, (err, row) => {
+    connection.query(sql, (err, row) => {
         const jsonListScreen = [];
         for (let obj of row) {
             let objListScreen = {};
@@ -36,13 +50,22 @@ router.get('/', (req, res, next) => {
     });
 });
 
-router.get('/:id', (req, res, next) => {
+router.get('/:id', (req, res) => {
     const id = req.params.id;
-    const select = 'products.id, products.concept, photos.photo_url';
-    const from = 'products, photos';
-    const where = 'products . id =  photos . product_id AND products.id = ?';
+    const sql = '\
+        SELECT\
+            products.id,\
+            products.concept,\
+            photos.photo_url\
+        FROM\
+            products,\
+            photos\
+        WHERE\
+            products.id = photos.product_id\
+        AND\
+            products.id = ?';
 
-    connection.query(`SELECT ${select} FROM ${from} WHERE ${where}`, [id], (err, row) => {
+    connection.query(sql, [id], (err, row) => {
         const jsonDetailScreen = [];
         const image_url = [];
         let objDetailScreen = {};
@@ -58,10 +81,27 @@ router.get('/:id', (req, res, next) => {
         };
         jsonDetailScreen.push(objDetailScreen);
 
-        let selectSub = 'students.name, students.major, students.grade, students.profile_photo_url, students.message';
-        let fromSub = 'students';
-        let whereSub = 'students.id IN (SELECT product_menbers.student_id FROM product_menbers WHERE product_menbers.product_id = ?)';
-        connection.query(`SELECT ${ selectSub } FROM ${ fromSub } WHERE ${ whereSub };`, [id], (err, row) => {
+        const sql_sub = '\
+            SELECT\
+                students.name,\
+                students.major,\
+                students.grade,\
+                students.profile_photo_url,\
+                students.message\
+            FROM\
+                students\
+            WHERE\
+                students.id\
+            IN(\
+                SELECT\
+                    product_menbers.student_id\
+                FROM\
+                    product_menbers\
+                WHERE\
+                product_menbers.product_id = ? \
+            )';
+
+        connection.query(sql_sub, [id], (err, row) => {
             let owner = {};
             let member = {};
             const ary = [];
