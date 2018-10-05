@@ -30,6 +30,7 @@
             "error",
             "always"
         ],
-        "no-var": "error"
+        "no-var": "error",
+        "end_of_line": "crlf" 
     }
 }
