@@ -96,7 +96,7 @@ router.get('/:id', (req, res) => {
                 SELECT\
                     product_menbers.student_id\
                 FROM\
-                    product_menbers\
+                    product_members\
                 WHERE\
                 product_menbers.product_id = ? \
             )';

@@ -10,10 +10,8 @@ require('dotenv').config();
 //     database: process.env.NODE_DB_DATABASE
 // });
 
-// =>app.user('/api/mydata', MyDataRouer);
 
-router.get('/', (err,req,res)=>{
-    res.send('mydata');
-});
+// router.get('/', (err,req,res)=>{
+// });
 
 module.exports = router;
