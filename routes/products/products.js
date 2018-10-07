@@ -31,10 +31,10 @@ router.get('/', (req, res) => {
             students.id = products.representative_student_id';
 
     connection.query(sql, (err, row) => {
-        const jsonListScreen = [];
+        const json = [];
         for (let obj of row) {
-            let objListScreen = {};
-            objListScreen = {
+            let listScreen = {};
+            listScreen = {
                 type: obj.major,
                 image_url: obj.photo_url,
                 owner: {
@@ -43,10 +43,10 @@ router.get('/', (req, res) => {
                     image_url: obj.profile_photo_url
                 }
             };
-            jsonListScreen.push(objListScreen);
+            json.push(listScreen);
         }
         res.header('Content-Type', 'application/json; charset=utf-8');
-        res.json(jsonListScreen);
+        res.json(json);
     });
 });
 
@@ -66,20 +66,20 @@ router.get('/:id', (req, res) => {
             products.id = ?';
 
     connection.query(sql, [id], (err, row) => {
-        const jsonDetailScreen = [];
+        const json = [];
         const image_url = [];
-        let objDetailScreen = {};
-        objDetailScreen = {
+        let detailScreen = {};
+        detailScreen = {
             id: row[0].id,
             concept: row[0].concept
         };
-        for (let obj of row) {
-            image_url.push(obj.photo_url);
+        for (let products of row) {
+            image_url.push( products.photo_url);
         }
-        objDetailScreen = {
+        detailScreen = {
             sub_image_urls: image_url
         };
-        jsonDetailScreen.push(objDetailScreen);
+        json.push(detailScreen);
 
         const sql_sub = '\
             SELECT\
@@ -96,35 +96,35 @@ router.get('/:id', (req, res) => {
                 SELECT\
                     product_menbers.student_id\
                 FROM\
-                    product_members\
+                    product_menbers\
                 WHERE\
                 product_menbers.product_id = ? \
             )';
 
-        connection.query(sql_sub, [id], (err, row) => {
+        connection.query(sql_sub, [id], (err, row) => {            
             let owner = {};
             let member = {};
-            const ary = [];
+            const team = [];
             owner = {
                 name: row[0].name,
                 subject: `${row[0].major} ${row[0].grade}`,
                 message: row[0].message,
                 image_url: row[0].profile_photo_url
             };
-            objDetailScreen.owner = owner;
-            for (let obj of row) {
+            detailScreen.owner = owner;
+            for (let members of row) {
                 member = {
-                    name: obj.name,
-                    subject: `${ obj.major } ${ obj.grade }`,
-                    message: obj.message,
-                    image_url: obj.profile_photo_url,
+                    name: members.name,
+                    subject: `${ members.major } ${ members.grade }`,
+                    message: members.message,
+                    image_url: members.profile_photo_url,
                 };
-                ary.push(member);
+                team.push(member);
                 member = {};
             }
-            objDetailScreen.member = ary;
+            detailScreen.member = team;
             res.header('Content-Type', 'application/json; charset=utf-8');
-            res.json(jsonDetailScreen);
+            res.json(json);
         });
     });
 });
