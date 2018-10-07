@@ -12,8 +12,8 @@ require('dotenv').config();
 
 // =>app.use('/api/:id/like', LikeRouter);
 
-router.get('/', (err, req, res) => {
-    res.send('like');
-});
+// router.get('/', (err, req, res) => {
+//     res.send('like');
+// });
 
 module.exports = router;
