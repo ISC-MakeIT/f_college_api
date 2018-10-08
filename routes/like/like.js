@@ -10,10 +10,4 @@ require('dotenv').config();
 //     database: process.env.NODE_DB_DATABASE
 // });
 
-// =>app.use('/api/:id/like', LikeRouter);
-
-// router.get('/', (err, req, res) => {
-//     res.send('like');
-// });
-
 module.exports = router;

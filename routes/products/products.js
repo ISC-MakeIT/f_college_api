@@ -33,8 +33,8 @@ router.get('/', (req, res) => {
     connection.query(sql, (err, row) => {
         const json = [];
         for (let obj of row) {
-            let listScreen = {};
-            listScreen = {
+            let products = {};
+            products = {
                 type: obj.major,
                 image_url: obj.photo_url,
                 owner: {
@@ -43,7 +43,7 @@ router.get('/', (req, res) => {
                     image_url: obj.profile_photo_url
                 }
             };
-            json.push(listScreen);
+            json.push(products);
         }
         res.header('Content-Type', 'application/json; charset=utf-8');
         res.json(json);
@@ -68,18 +68,18 @@ router.get('/:id', (req, res) => {
     connection.query(sql, [id], (err, row) => {
         const json = [];
         const image_url = [];
-        let detailScreen = {};
-        detailScreen = {
+        let product = {};
+        product = {
             id: row[0].id,
             concept: row[0].concept
         };
-        for (let products of row) {
-            image_url.push( products.photo_url);
+        for (let photo of row) {
+            image_url.push( photo.photo_url);
         }
-        detailScreen = {
+        product = {
             sub_image_urls: image_url
         };
-        json.push(detailScreen);
+        json.push(product);
 
         const sql_sub = '\
             SELECT\
@@ -111,7 +111,7 @@ router.get('/:id', (req, res) => {
                 message: row[0].message,
                 image_url: row[0].profile_photo_url
             };
-            detailScreen.owner = owner;
+            product.owner = owner;
             for (let members of row) {
                 member = {
                     name: members.name,
@@ -122,7 +122,7 @@ router.get('/:id', (req, res) => {
                 team.push(member);
                 member = {};
             }
-            detailScreen.member = team;
+            product.member = team;
             res.header('Content-Type', 'application/json; charset=utf-8');
             res.json(json);
         });
