@@ -15,7 +15,7 @@ const connection = mysql.createConnection({
 //投票ページ
 router.get('/', (req, res, next) => {
     const id = req.params.id;
-    const sql = "\
+    const sql = '\
         SELECT\
             `students`.`name`,\
             `students`.`grade`,\
@@ -45,7 +45,7 @@ router.get('/', (req, res, next) => {
                 WHERE\
                     `vote`.`voter_id` = ?\
             )\
-        )";
+        )';
 
     connection.query(sql, [id], (err, row) => {
         console.error(err);
@@ -63,8 +63,8 @@ router.get('/', (req, res, next) => {
                 }
             };
             jsonVote.push(vote);
-        };
-        res.header("Content-Type", "application/json; charset=utf-8");
+        }
+        res.header('Content-Type', 'application/json; charset=utf-8');
         res.json(jsonVote);
     });
 });

@@ -11,7 +11,7 @@ const connection = mysql.createConnection({
 });
 
 // =>app.use('/api/:id/like', LikeRouter);
-
+// ルーティングができるか確認するためだけのテストメソッド
 router.get('/', (err, req, res) => {
     res.send('like');
 });
