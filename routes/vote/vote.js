@@ -13,7 +13,7 @@ const connection = mysql.createConnection({
 });
 
 //投票ページ
-router.get('/', (req, res, next) => {
+router.get('/', (req, res) => {
     const id = req.params.id;
     const sql = '\
         SELECT\
@@ -48,7 +48,9 @@ router.get('/', (req, res, next) => {
         )';
 
     connection.query(sql, [id], (err, row) => {
-        console.error(err);
+        catch (err){
+            throw err;
+        }
         const jsonVote = [];
         let vote = {};
         for (let obj of row) {
