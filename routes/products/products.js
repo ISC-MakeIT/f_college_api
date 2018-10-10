@@ -32,15 +32,15 @@ router.get('/', (req, res) => {
 
     connection.query(sql, (err, row) => {
         const json = [];
-        for (let obj of row) {
+        for (let product of row) {
             let products = {};
             products = {
-                type: obj.major,
-                image_url: obj.photo_url,
+                type: product.major,
+                image_url: product.photo_url,
                 owner: {
-                    name: obj.name,
-                    subject: `${obj.major} ${obj.grade}`,
-                    image_url: obj.profile_photo_url
+                    name: product.name,
+                    subject: `${product.major} ${product.grade}`,
+                    image_url: product.profile_photo_url
                 }
             };
             json.push(products);
