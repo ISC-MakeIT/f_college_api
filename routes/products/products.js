@@ -11,36 +11,35 @@ const connection = mysql.createConnection({
 });
 
 // =>app.use('/api/', TopRouter);
-
-// 
+// プロダクト一覧を取得する
 router.get('/', (req, res, next) => {
     let select = '`photos`.`photo_url`,`students`.`name`, `students`.`major`,`students`.`grade`, `students`.`profile_photo_url`, `products`.`id`, `products`.`genre`, `products`.`title`';
     let from = '`photos`, `products`, `students`';
     let where = '`products`.`id` = `photos`.`product_id` and `students`.`id` = `products`.`representative_student_id`';
 
-    const sql = "\
+    const sql = '\
         SELECT\
-        `photos`.`photo_url`,"
-    connection.query("sql"
-        `select ${ select } from ${ from } where ${ where };`, (err, row) => {
-            console.error(err);
-            const jsonListScreen = [];
-            for (let obj of row) {
-                let objListScreen = {};
-                objListScreen = {
-                    type: obj.major,
-                    image_url: obj.photo_url,
-                    owner: {
-                        name: obj.name,
-                        subject: `${ obj.major } ${ obj.grade }`,
-                        image_url: obj.profile_photo_url
-                    }
-                };
-                jsonListScreen.push(objListScreen);
-            }
-            res.header('Content-Type', 'application/json; charset=utf-8');
-            res.json(jsonListScreen);
-        });
+        `photos`.`photo_url`,';
+    connection.query('sql'
+    `select ${ select } from ${ from } where ${ where };`, (err, row) => {
+        console.error(err);
+        const jsonListScreen = [];
+        for (let obj of row) {
+            let objListScreen = {};
+            objListScreen = {
+                type: obj.major,
+                image_url: obj.photo_url,
+                owner: {
+                    name: obj.name,
+                    subject: `${ obj.major } ${ obj.grade }`,
+                    image_url: obj.profile_photo_url
+                }
+            };
+            jsonListScreen.push(objListScreen);
+        }
+        res.header('Content-Type', 'application/json; charset=utf-8');
+        res.json(jsonListScreen);
+    });
 });
 
 router.get('/:id', (req, res, next) => {
