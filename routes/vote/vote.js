@@ -48,7 +48,7 @@ router.get('/', (req, res) => {
         )';
 
     connection.query(sql, [id], (err, row) => {
-        catch (err){
+        if (err){
             throw err;
         }
         const jsonVote = [];
