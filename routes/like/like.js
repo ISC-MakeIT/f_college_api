@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-//const mysql = require('mysql2');
+// const mysql = require('mysql2');
 require('dotenv').config();
 
 // const connection = mysql.createConnection({
@@ -9,5 +9,11 @@ require('dotenv').config();
 //     password: process.env.NODE_DB_PASSWORD,
 //     database: process.env.NODE_DB_DATABASE
 // });
+
+// =>app.use('/api/:id/like', LikeRouter);
+// ルーティングができるか確認するためだけのテストメソッド
+router.get('/', (err, req, res) => {
+    res.send('like');
+});
 
 module.exports = router;

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-//const mysql = require('mysql2');
+// const mysql = require('mysql2');
 require('dotenv').config();
 
 // const connection = mysql.createConnection({
@@ -10,8 +10,10 @@ require('dotenv').config();
 //     database: process.env.NODE_DB_DATABASE
 // });
 
+// =>app.user('/api/mydata', MyDataRouer);
 
-// router.get('/', (err,req,res)=>{
-// });
+router.get('/', (err, req, res) => {
+    res.send('mydata');
+});
 
 module.exports = router;

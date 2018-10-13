@@ -1,5 +1,7 @@
 const express = require('express');
-const router = express.Router();
+const router = express.Router({
+    mergeParams: true
+});
 const mysql = require('mysql2');
 require('dotenv').config();
 
@@ -46,6 +48,9 @@ router.get('/', (req, res) => {
         )';
 
     connection.query(sql, [id], (err, row) => {
+        if (err){
+            throw err;
+        }
         const jsonVote = [];
         let vote = {};
         for (let obj of row) {
