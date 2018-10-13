@@ -10,88 +10,121 @@ const connection = mysql.createConnection({
     database: process.env.NODE_DB_DATABASE
 });
 
-// =>app.use('/api/', TopRouter);
-// プロダクト一覧を取得する
-router.get('/', (req, res, next) => {
-    let select = '`photos`.`photo_url`,`students`.`name`, `students`.`major`,`students`.`grade`, `students`.`profile_photo_url`, `products`.`id`, `products`.`genre`, `products`.`title`';
-    let from = '`photos`, `products`, `students`';
-    let where = '`products`.`id` = `photos`.`product_id` and `students`.`id` = `products`.`representative_student_id`';
-
+router.get('/', (req, res) => {
     const sql = '\
         SELECT\
-        `photos`.`photo_url`,';
-    connection.query('sql'
-    `select ${ select } from ${ from } where ${ where };`, (err, row) => {
-        console.error(err);
-        const jsonListScreen = [];
-        for (let obj of row) {
-            let objListScreen = {};
-            objListScreen = {
-                type: obj.major,
-                image_url: obj.photo_url,
+            photos.photo_url,\
+            students.name,\
+            students.major,\
+            students.grade,\
+            students.profile_photo_url,\
+            products.id,\
+            products.genre,\
+            products.title\
+        FROM\
+            photos,\
+            products,\
+            students\
+        WHERE\
+            products.id = photos.product_id\
+        AND\
+            students.id = products.representative_student_id';
+
+    connection.query(sql, (err, row) => {
+        const json = [];
+        for (let product of row) {
+            let products = {};
+            products = {
+                type: product.major,
+                image_url: product.photo_url,
                 owner: {
-                    name: obj.name,
-                    subject: `${ obj.major } ${ obj.grade }`,
-                    image_url: obj.profile_photo_url
+                    name: product.name,
+                    subject: `${product.major} ${product.grade}`,
+                    image_url: product.profile_photo_url
                 }
             };
-            jsonListScreen.push(objListScreen);
+            json.push(products);
         }
         res.header('Content-Type', 'application/json; charset=utf-8');
-        res.json(jsonListScreen);
+        res.json(json);
     });
 });
 
-router.get('/:id', (req, res, next) => {
-    let id = req.params.id;
-    let select = '`products`.`id`, `products`.`concept`, `photos`.`photo_url`';
-    let from = '`products`, `photos`';
-    let where = '`products`.`id` = `photos`.`product_id` AND `products`.`id` = ?';
-    connection.query(`SELECT ${ select } FROM ${ from } WHERE ${ where };`, [id], (err, row) => {
-        console.error(err);
-        const jsonDetailScreen = [];
+router.get('/:id', (req, res) => {
+    const id = req.params.id;
+    const sql = '\
+        SELECT\
+            products.id,\
+            products.concept,\
+            photos.photo_url\
+        FROM\
+            products,\
+            photos\
+        WHERE\
+            products.id = photos.product_id\
+        AND\
+            products.id = ?';
+
+    connection.query(sql, [id], (err, row) => {
+        const json = [];
         const image_url = [];
-        let objDetailScreen = {};
-        objDetailScreen = {
+        let product = {};
+        product = {
             id: row[0].id,
             concept: row[0].concept
         };
-        for (let obj of row) {
-            image_url.push(obj.photo_url);
+        for (let photo of row) {
+            image_url.push( photo.photo_url);
         }
-        objDetailScreen = {
+        product = {
             sub_image_urls: image_url
         };
-        jsonDetailScreen.push(objDetailScreen);
+        json.push(product);
 
-        let selectSub = '`students`.`name`, `students`.`major`, `students`.`grade`, `students`.`profile_photo_url`,`students`.`message`';
-        let fromSub = '`students`';
-        let whereSub = '`students`.`id` IN (SELECT `product_menbers`.`student_id` FROM `product_menbers` WHERE `product_menbers`.`product_id` = ?)';
-        connection.query(`SELECT ${ selectSub } FROM ${ fromSub } WHERE ${ whereSub };`, [id], (err, row) => {
-            console.error(err);
+        const sql_sub = '\
+            SELECT\
+                students.name,\
+                students.major,\
+                students.grade,\
+                students.profile_photo_url,\
+                students.message\
+            FROM\
+                students\
+            WHERE\
+                students.id\
+            IN(\
+                SELECT\
+                    product_menbers.student_id\
+                FROM\
+                    product_menbers\
+                WHERE\
+                product_menbers.product_id = ? \
+            )';
+
+        connection.query(sql_sub, [id], (err, row) => {            
             let owner = {};
             let member = {};
-            const ary = [];
+            const team = [];
             owner = {
                 name: row[0].name,
-                subject: `${ row[0].major } ${ row[0].grade }`,
+                subject: `${row[0].major} ${row[0].grade}`,
                 message: row[0].message,
                 image_url: row[0].profile_photo_url
             };
-            objDetailScreen.owner = owner;
-            for (let obj of row) {
+            product.owner = owner;
+            for (let members of row) {
                 member = {
-                    name: obj.name,
-                    subject: `${ obj.major } ${ obj.grade }`,
-                    message: obj.message,
-                    image_url: obj.profile_photo_url,
+                    name: members.name,
+                    subject: `${ members.major } ${ members.grade }`,
+                    message: members.message,
+                    image_url: members.profile_photo_url,
                 };
-                ary.push(member);
+                team.push(member);
                 member = {};
             }
-            objDetailScreen.member = ary;
+            product.member = team;
             res.header('Content-Type', 'application/json; charset=utf-8');
-            res.json(jsonDetailScreen);
+            res.json(json);
         });
     });
 });
