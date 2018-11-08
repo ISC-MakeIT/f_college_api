@@ -14,8 +14,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
 // ルーティング先
-const TopRouter = require('./routes/top.js');
-app.use('/', TopRouter);
+const indexRouter = require('./routes/index.js');
+app.use('/', indexRouter);
 
 const ProductsRouter = require('./routes/products/products.js');
 app.use('/api/products', ProductsRouter);

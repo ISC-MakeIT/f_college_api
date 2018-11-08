@@ -2,6 +2,13 @@
 package-lock.json
 
 
+.DS_Store
+.AppleDouble
+.LSOverride
+.vscode/launch.json
+.aws/
+.vscode/
+
 ### visualstudiocode
 
 .vscode/*
