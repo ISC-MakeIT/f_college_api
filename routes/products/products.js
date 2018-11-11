@@ -10,45 +10,66 @@ const connection = mysql.createConnection({
     database: process.env.NODE_DB_DATABASE
 });
 
-router.get('/', (req, res) => {
-    const sql = '\
-        SELECT\
-            photos.photo_url,\
-            students.name,\
-            students.major,\
-            students.grade,\
-            students.profile_photo_url,\
-            products.id,\
-            products.genre,\
-            products.title\
-        FROM\
-            photos,\
-            products,\
-            students\
-        WHERE\
-            products.id = photos.product_id\
-        AND\
-            students.id = products.representative_student_id';
+/* DB接続チェック用 */
+// router.get('/', (req, res) => {
+//     const sql = '\
+//     SELECT * FROM students;';
+//     connection.query(sql, (err, row) => {
+//         console.log(row);
+//     });
+// });
 
-    connection.query(sql, (err, row) => {
-        const json = [];
-        for (let product of row) {
-            let products = {};
-            products = {
-                type: product.major,
-                image_url: product.photo_url,
-                owner: {
-                    name: product.name,
-                    subject: `${product.major} ${product.grade}`,
-                    image_url: product.profile_photo_url
+
+// https://fc-fb-live.com/api/products/
+router.get('/', (req, res) => {
+    getUserPhotos().then(
+        photos => {
+
+            let query = 'SELECT products.product_id, products.theme, products.genre, students.name, students.class FROM products, students WHERE products.leader_id = students.student_id'
+            connection.query(query, (err, rows) => {
+                let products = [];
+                for (let i = 0; i < rows.length; i++) {
+                    item=rows[i];
+                    items = {
+                        id: item.product_id,
+                        title: item.theme,
+                        genre: item.genre,
+                        head_shot: photos[i].head_shot,
+                        owner: {
+                            name: item.name,
+                            class: item.class,
+                            profile_photo: photos[i].profile_photo
+                        },
+                    };
+                    products.push(items);
                 }
-            };
-            json.push(products);
+                res.header('Content-Type', 'application/json; charset=utf-8');
+                res.json(products);
+            });
         }
-        res.header('Content-Type', 'application/json; charset=utf-8');
-        res.json(json);
-    });
+    );
 });
+
+
+
+const getUserPhotos = () => {
+
+    return new Promise((resolve) => {
+        let getPhotos = 'SELECT photos.photo_path, profile_photos.profile_photo_path FROM photos JOIN profile_photos ON photos.product_id = profile_photos.product_id GROUP BY photos.product_id;';
+        connection.query(getPhotos, (err, row) => {
+            let photos = [];
+            for (let item of row) {
+                let items = {};
+                items = {
+                    head_shot: item.photo_path,
+                    profile_photo: item.profile_photo_path
+                };
+                photos.push(items);
+            }
+            resolve(photos);
+        });
+    });
+}
 
 router.get('/:id', (req, res) => {
     const id = req.params.id;
@@ -74,7 +95,7 @@ router.get('/:id', (req, res) => {
             concept: row[0].concept
         };
         for (let photo of row) {
-            image_url.push( photo.photo_url);
+            image_url.push(photo.photo_url);
         }
         product = {
             sub_image_urls: image_url
@@ -101,7 +122,7 @@ router.get('/:id', (req, res) => {
                 product_menbers.product_id = ? \
             )';
 
-        connection.query(sql_sub, [id], (err, row) => {            
+        connection.query(sql_sub, [id], (err, row) => {
             let owner = {};
             let member = {};
             const team = [];
