@@ -10,43 +10,53 @@ const connection = mysql.createConnection({
     database: process.env.NODE_DB_DATABASE
 });
 
+// https://fc-fb-live.com/api/products/
 router.get('/', (req, res) => {
-    const sql = '\
-        SELECT\
-            photos.photo_url,\
-            students.name,\
-            students.major,\
-            students.grade,\
-            students.profile_photo_url,\
-            products.id,\
-            products.genre,\
-            products.title\
-        FROM\
-            photos,\
-            products,\
-            students\
-        WHERE\
-            products.id = photos.product_id\
-        AND\
-            students.id = products.representative_student_id';
+    const query = 'SELECT ' +
+        'products.genre, ' +
+        'products.entry_order, ' +
+        'products.product_number, ' +
+        'students.name, ' +
+        'students.class, ' +
+        'photos.photo_path, ' +
+        'profile_photos.profile_photo_path ' +
+        'FROM photos ' +
+        'JOIN profile_photos ON photos.product_id = profile_photos.product_id ' +
+        'JOIN products ON profile_photos.product_id = products.product_id ' +
+        'JOIN students ON products.leader_id = students.student_id ' +
+        'GROUP BY products.product_id ' +
+        'ORDER BY products.genre desc, products.entry_order ASC ';
 
-    connection.query(sql, (err, row) => {
-        const json = [];
-        for (let product of row) {
-            let products = {};
-            products = {
-                type: product.major,
-                image_url: product.photo_url,
-                owner: {
-                    name: product.name,
-                    subject: `${product.major} ${product.grade}`,
-                    image_url: product.profile_photo_url
-                }
+    connection.query(query, (err, row) => {
+        let products = [];
+        let fashion = {};
+        let beauty = {};
+        let fashion_products = [];
+        let beauty_products = [];
+        for (let item of row) {
+            let items = {};
+            items = {
+                entry_order: item.entry_order,
+                id: item.product_number,
+                title: item.title,
+                head_shot: item.photo_path,
+                profile_photo: item.profile_photo_path,
+                student_name: item.name,
+                student_class: item.class
             };
-            json.push(products);
+            if (item.genre === 'FASHION') {
+                fashion_products.push(items);
+            }
+            if (item.genre === 'BEAUTY') {
+                beauty_products.push(item);
+            }
         }
+        fashion.fashion = fashion_products;
+        beauty.beauty = beauty_products;
+        products.push(fashion);
+        products.push(beauty);
         res.header('Content-Type', 'application/json; charset=utf-8');
-        res.json(json);
+        res.json(products);
     });
 });
 
@@ -74,7 +84,7 @@ router.get('/:id', (req, res) => {
             concept: row[0].concept
         };
         for (let photo of row) {
-            image_url.push( photo.photo_url);
+            image_url.push(photo.photo_url);
         }
         product = {
             sub_image_urls: image_url
@@ -101,7 +111,7 @@ router.get('/:id', (req, res) => {
                 product_menbers.product_id = ? \
             )';
 
-        connection.query(sql_sub, [id], (err, row) => {            
+        connection.query(sql_sub, [id], (err, row) => {
             let owner = {};
             let member = {};
             const team = [];
