@@ -39,53 +39,39 @@ router.get('/', (req, res) => {
 
     connection.query(query, (err, row) => {
         let products = [];
-        products.fashion = {};
-        products.beauty = {};
+        let fashion = {};
+        let beauty = {};
         let fashion_products = [];
         let beauty_products = [];
         for (let item of row) {
+            let items = {};
             items = {
                 entry_order: item.entry_order,
                 id: item.product_number,
                 title: item.title,
-                photos: {
-                    head_shot: item.head_shot,
-                    profile_photo: item.profile_photo
-                },
-                owner: {
-                    student_name: item.name,
-                    student_class: item.class
-                }
-
+                head_shot: item.photo_path,
+                profile_photo: item.profile_photo_path,
+                student_name: item.name,
+                student_class: item.class
             }
             if (item.genre === 'FASHION') {
+                // fashion_products.push(items);
                 fashion_products.push(items);
             }
+            if (item.genre === 'BEAUTY') {
+                beauty_products.push(item);
+            }
         }
-        
-        products.fashion=fashion_products;
+        fashion.fashion = fashion_products;
+        beauty.beauty = beauty_products;
+        products.push(fashion);
+        products.push(beauty);
         console.log(1);
-        console.dir(products);
+        console.log(products[0].fashion[2].profile_photo);
         res.header('Content-Type', 'application/json; charset=utf-8');
         res.json(products);
     });
 });
-
-//     }
-//     items = {
-//         id: item.product_number,
-//         title: item.theme,
-//         genre: item.genre,
-//         head_shot: photos[i].head_shot,
-//         owner: {
-//             name: item.name,
-//             class: item.class,
-//             profile_photo: photos[i].profile_photo
-//         },
-//     };
-//     products.push(items);
-// }
-
 
 router.get('/:id', (req, res) => {
     const id = req.params.id;
