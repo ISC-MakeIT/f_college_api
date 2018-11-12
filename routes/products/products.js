@@ -56,7 +56,6 @@ router.get('/', (req, res) => {
         products.push(fashion);
         products.push(beauty);
         res.header('Content-Type', 'application/json; charset=utf-8');
-        console.dir(products);
         res.json(products);
     });
 });
