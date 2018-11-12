@@ -10,16 +10,6 @@ const connection = mysql.createConnection({
     database: process.env.NODE_DB_DATABASE
 });
 
-/* DB接続チェック用 */
-// router.get('/', (req, res) => {
-//     const sql = '\
-//     SELECT * FROM students;';
-//     connection.query(sql, (err, row) => {
-//         console.log(row);
-//     });
-// });
-
-
 // https://fc-fb-live.com/api/products/
 router.get('/', (req, res) => {
     const query = 'SELECT ' +
@@ -53,9 +43,8 @@ router.get('/', (req, res) => {
                 profile_photo: item.profile_photo_path,
                 student_name: item.name,
                 student_class: item.class
-            }
+            };
             if (item.genre === 'FASHION') {
-                // fashion_products.push(items);
                 fashion_products.push(items);
             }
             if (item.genre === 'BEAUTY') {
@@ -66,9 +55,8 @@ router.get('/', (req, res) => {
         beauty.beauty = beauty_products;
         products.push(fashion);
         products.push(beauty);
-        console.log(1);
-        console.log(products[0].fashion[2].profile_photo);
         res.header('Content-Type', 'application/json; charset=utf-8');
+        console.dir(products);
         res.json(products);
     });
 });
