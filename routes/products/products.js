@@ -13,6 +13,7 @@ const connection = mysql.createConnection({
 // https://fc-fb-live.com/api/products/
 router.get('/', (req, res) => {
     const query = 'SELECT ' +
+        'products.product_id, ' + 
         'products.genre, ' +
         'products.entry_order, ' +
         'products.product_number, ' +
@@ -36,19 +37,22 @@ router.get('/', (req, res) => {
         for (let item of row) {
             let items = {};
             items = {
+                id:item.product_id,
                 entry_order: item.entry_order,
-                id: item.product_number,
+                product_number: item.product_number,
                 title: item.title,
                 head_shot: item.photo_path,
-                profile_photo: item.profile_photo_path,
-                student_name: item.name,
-                student_class: item.class
+                owner: {
+                    profile_photo: item.profile_photo_path,
+                    student_name: item.name,
+                    student_class: item.class
+                }
             };
+            if (item.genre === 'BEAUTY') {
+                beauty_products.push(items);
+            }
             if (item.genre === 'FASHION') {
                 fashion_products.push(items);
-            }
-            if (item.genre === 'BEAUTY') {
-                beauty_products.push(item);
             }
         }
         fashion.fashion = fashion_products;
