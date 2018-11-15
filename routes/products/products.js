@@ -18,6 +18,7 @@ router.get('/', (req, res) => {
         'products.genre, ' +
         'products.entry_order, ' +
         'products.product_number, ' +
+        'students.student_id, ' +
         'students.name, ' +
         'students.class, ' +
         'photos.photo_path, ' +
@@ -41,9 +42,11 @@ router.get('/', (req, res) => {
                 title: item.title,
                 head_shot: item.photo_path,
                 owner: {
+                    student_id: item.student_id,
                     profile_photo: item.profile_photo_path,
                     student_name: item.name,
-                    student_class: item.class
+                    student_class: item.class,
+                    leader_flg: null,
                 }
             };
             if (item.genre === 'BEAUTY') {
