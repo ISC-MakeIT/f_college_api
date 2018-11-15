@@ -99,11 +99,7 @@ router.get('/:id', (req, res) => {
         connection.query(query_for_photos, (err, photo) => {
             let photos = [];
             for (let item of photo) {
-                let items = {};
-                items = {
-                    photo_path: item.photo_path
-                };
-                photos.push(items);
+                photos.push(item.photo_path);
             }
             product.photos = photos;
             let query_for_menbers = 'SELECT ' +
