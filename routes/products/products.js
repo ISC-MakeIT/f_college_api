@@ -49,6 +49,7 @@ router.get('/', (req, res) => {
                     leader_flg: null,
                 }
             };
+
             if (item.genre === 'BEAUTY') {
                 beauty_products.push(items);
             }
@@ -76,18 +77,13 @@ router.get('/:id', (req, res) => {
     query_for_products = mysql.format(query_for_products, req.params.id);
 
     connection.query(query_for_products, (err, caption) => {
-        let captions = [];
-        let items = {};
-        for (let item of caption) {
-            items = {
-                product_id: item.product_id,
-                genre: item.genre,
-                theme: item.theme,
-                concept: item.concept
-            };
-            captions.push(items);
-        }
-        product.caption = captions;
+        product = {
+            product_id: caption[0].product_id,
+            genre: caption[0].genre,
+            theme: caption[0].theme,
+            concept: caption[0].concept
+        };
+
         let query_for_photos = 'SELECT ' +
             'products.product_id, ' +
             'photos.photo_path ' +
@@ -105,6 +101,7 @@ router.get('/:id', (req, res) => {
                 photos.push(item.photo_path);
             }
             product.photos = photos;
+
             let query_for_members = 'SELECT ' +
                 'products.product_id, ' +
                 'product_members.student_id, ' +
@@ -139,6 +136,7 @@ router.get('/:id', (req, res) => {
                     members.push(items);
                 }
                 product.members = members;
+
                 res.set('Content-Type', 'application/json; charset=utf-8');
                 res.json(product);
             });
