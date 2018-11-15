@@ -1,12 +1,12 @@
 module.exports = class Scheme {
-	constructor(query, table, param) {
+    constructor(query, table, param) {
 
-		this.getQuery = () => {
-			return query;
-		};
+        this.getQuery = () => {
+            return query;
+        };
 
-		this.getTable = () => {
-			return table.concat(param);
-		};
-	}
+        this.getTable = () => {
+            return table.concat(param);
+        };
+    }
 };

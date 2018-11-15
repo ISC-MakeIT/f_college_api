@@ -1,6 +1,6 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const connection = require("../../dbConnection");
+const connection = require('../../dbConnection');
 
 // https://fc-fb-live.com/api/products/
 router.get('/', (req, res) => {
