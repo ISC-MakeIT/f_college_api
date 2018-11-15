@@ -109,6 +109,7 @@ router.get('/:id', (req, res) => {
                 'products.product_id, ' +
                 'product_members.student_id, ' +
                 'students.name,students.class, ' +
+                'profile_photos.profile_photo_path, ' +
                 'product_members.leader_flg ' +
                 'FROM ' +
                 'products ' +
@@ -116,6 +117,7 @@ router.get('/:id', (req, res) => {
                 'product_members ON products.product_id = product_members.product_id ' +
                 'JOIN ' +
                 'students ON product_members.student_id = students.student_id ' +
+                'JOIN profile_photos ON products.product_id = profile_photos.product_id ' +
                 'WHERE ' +
                 'products.product_id= ?';
             query_for_members = mysql.format(query_for_members, req.params.id);
@@ -126,8 +128,10 @@ router.get('/:id', (req, res) => {
                     let items = {};
                     items = {
                         student_id: item.student_id,
+                        profile_photo: item.profile_photo_path,
                         student_name: item.name,
-                        student_class: item.class
+                        student_class: item.class,
+                        leader_flg: null,
                     };
                     if (item.leader_flg === 1) {
                         items.leader_flg = true;
