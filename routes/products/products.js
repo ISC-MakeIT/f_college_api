@@ -105,7 +105,7 @@ router.get('/:id', (req, res) => {
                 photos.push(item.photo_path);
             }
             product.photos = photos;
-            let query_for_menbers = 'SELECT ' +
+            let query_for_members = 'SELECT ' +
                 'products.product_id, ' +
                 'product_members.student_id, ' +
                 'students.name,students.class, ' +
@@ -118,11 +118,11 @@ router.get('/:id', (req, res) => {
                 'students ON product_members.student_id = students.student_id ' +
                 'WHERE ' +
                 'products.product_id= ?';
-            query_for_menbers = mysql.format(query_for_menbers, req.params.id);
+            query_for_members = mysql.format(query_for_members, req.params.id);
 
-            connection.query(query_for_menbers, (err, menber) => {
-                let menbers = [];
-                for (let item of menber) {
+            connection.query(query_for_members, (err, member) => {
+                let members = [];
+                for (let item of member) {
                     let items = {};
                     items = {
                         student_id: item.student_id,
@@ -132,9 +132,9 @@ router.get('/:id', (req, res) => {
                     if (item.leader_flg === 1) {
                         items.leader_flg = true;
                     }
-                    menbers.push(items);
+                    members.push(items);
                 }
-                product.menbers = menbers;
+                product.members = members;
                 res.set('Content-Type', 'application/json; charset=utf-8');
                 res.json(product);
             });
