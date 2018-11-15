@@ -31,7 +31,7 @@ router.get('/', (req, res) => {
 
     connection.query(query, (err, rows) => {
         let fashion_products = [];
-        let beauty_products = [];  
+        let beauty_products = [];
         let items = {};
         for (let item of rows) {
             items = {
@@ -62,15 +62,15 @@ router.get('/', (req, res) => {
 
 // https://fc-fb-live.com/api/products/1
 router.get('/:id', (req, res) => {
-
     let product = {};
-    const query_for_products = 'SELECT ' +
+    let query_for_products = 'SELECT ' +
         'products.product_id, ' +
         'products.genre, ' +
         'products.theme, ' +
         'products.concept ' +
         'FROM products ' +
-        'WHERE products.product_id = 1';
+        'WHERE products.product_id = ?';
+    query_for_products = mysql.format(query_for_products, req.params.id);
 
     connection.query(query_for_products, (err, caption) => {
         let captions = [];
@@ -85,7 +85,7 @@ router.get('/:id', (req, res) => {
             captions.push(items);
         }
         product.caption = captions;
-        const query_for_photos = 'SELECT ' +
+        let query_for_photos = 'SELECT ' +
             'products.product_id, ' +
             'photos.photo_path ' +
             'FROM ' +
@@ -93,7 +93,8 @@ router.get('/:id', (req, res) => {
             'JOIN ' +
             'photos ON products.product_id = photos.product_id ' +
             'WHERE ' +
-            'products.product_id=1';
+            'products.product_id= ?';
+        query_for_photos = mysql.format(query_for_photos, req.params.id);
 
         connection.query(query_for_photos, (err, photo) => {
             let photos = [];
@@ -105,7 +106,7 @@ router.get('/:id', (req, res) => {
                 photos.push(items);
             }
             product.photos = photos;
-            const query_for_menbers = 'SELECT ' +
+            let query_for_menbers = 'SELECT ' +
                 'products.product_id, ' +
                 'product_members.student_id, ' +
                 'students.name,students.class, ' +
@@ -117,7 +118,8 @@ router.get('/:id', (req, res) => {
                 'JOIN ' +
                 'students ON product_members.student_id = students.student_id ' +
                 'WHERE ' +
-                'products.product_id=1';
+                'products.product_id= ?';
+            query_for_menbers = mysql.format(query_for_menbers, req.params.id);
 
             connection.query(query_for_menbers, (err, menber) => {
                 let menbers = [];
