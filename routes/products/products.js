@@ -12,8 +12,9 @@ const connection = mysql.createConnection({
 
 // https://fc-fb-live.com/api/products/
 router.get('/', (req, res) => {
+    let products = {};
     const query = 'SELECT ' +
-        'products.product_id, ' + 
+        'products.product_id, ' +
         'products.genre, ' +
         'products.entry_order, ' +
         'products.product_number, ' +
@@ -28,16 +29,13 @@ router.get('/', (req, res) => {
         'GROUP BY products.product_id ' +
         'ORDER BY products.genre desc, products.entry_order ASC ';
 
-    connection.query(query, (err, row) => {
-        let products = [];
-        let fashion = {};
-        let beauty = {};
+    connection.query(query, (err, rows) => {
         let fashion_products = [];
-        let beauty_products = [];
-        for (let item of row) {
-            let items = {};
+        let beauty_products = [];  
+        let items = {};
+        for (let item of rows) {
             items = {
-                id:item.product_id,
+                product_id: item.product_id,
                 entry_order: item.entry_order,
                 product_number: item.product_number,
                 title: item.title,
@@ -55,90 +53,90 @@ router.get('/', (req, res) => {
                 fashion_products.push(items);
             }
         }
-        fashion.fashion = fashion_products;
-        beauty.beauty = beauty_products;
-        products.push(fashion);
-        products.push(beauty);
+        products.fashion = fashion_products;
+        products.beauty = beauty_products;
         res.header('Content-Type', 'application/json; charset=utf-8');
         res.json(products);
     });
 });
 
+// https://fc-fb-live.com/api/products/1
 router.get('/:id', (req, res) => {
-    const id = req.params.id;
-    const sql = '\
-        SELECT\
-            products.id,\
-            products.concept,\
-            photos.photo_url\
-        FROM\
-            products,\
-            photos\
-        WHERE\
-            products.id = photos.product_id\
-        AND\
-            products.id = ?';
 
-    connection.query(sql, [id], (err, row) => {
-        const json = [];
-        const image_url = [];
-        let product = {};
-        product = {
-            id: row[0].id,
-            concept: row[0].concept
-        };
-        for (let photo of row) {
-            image_url.push(photo.photo_url);
-        }
-        product = {
-            sub_image_urls: image_url
-        };
-        json.push(product);
+    let product = {};
+    const query_for_products = 'SELECT ' +
+        'products.product_id, ' +
+        'products.genre, ' +
+        'products.theme, ' +
+        'products.concept ' +
+        'FROM products ' +
+        'WHERE products.product_id = 1';
 
-        const sql_sub = '\
-            SELECT\
-                students.name,\
-                students.major,\
-                students.grade,\
-                students.profile_photo_url,\
-                students.message\
-            FROM\
-                students\
-            WHERE\
-                students.id\
-            IN(\
-                SELECT\
-                    product_menbers.student_id\
-                FROM\
-                    product_menbers\
-                WHERE\
-                product_menbers.product_id = ? \
-            )';
-
-        connection.query(sql_sub, [id], (err, row) => {
-            let owner = {};
-            let member = {};
-            const team = [];
-            owner = {
-                name: row[0].name,
-                subject: `${row[0].major} ${row[0].grade}`,
-                message: row[0].message,
-                image_url: row[0].profile_photo_url
+    connection.query(query_for_products, (err, caption) => {
+        let captions = [];
+        let items = {};
+        for (let item of caption) {
+            items = {
+                product_id: item.product_id,
+                genre: item.genre,
+                theme: item.theme,
+                concept: item.concept
             };
-            product.owner = owner;
-            for (let members of row) {
-                member = {
-                    name: members.name,
-                    subject: `${ members.major } ${ members.grade }`,
-                    message: members.message,
-                    image_url: members.profile_photo_url,
+            captions.push(items);
+        }
+        product.caption = captions;
+        const query_for_photos = 'SELECT ' +
+            'products.product_id, ' +
+            'photos.photo_path ' +
+            'FROM ' +
+            'products ' +
+            'JOIN ' +
+            'photos ON products.product_id = photos.product_id ' +
+            'WHERE ' +
+            'products.product_id=1';
+
+        connection.query(query_for_photos, (err, photo) => {
+            let photos = [];
+            for (let item of photo) {
+                let items = {};
+                items = {
+                    photo_path: item.photo_path
                 };
-                team.push(member);
-                member = {};
+                photos.push(items);
             }
-            product.member = team;
-            res.header('Content-Type', 'application/json; charset=utf-8');
-            res.json(json);
+            product.photos = photos;
+            const query_for_menbers = 'SELECT ' +
+                'products.product_id, ' +
+                'product_members.student_id, ' +
+                'students.name,students.class, ' +
+                'product_members.leader_flg ' +
+                'FROM ' +
+                'products ' +
+                'JOIN ' +
+                'product_members ON products.product_id = product_members.product_id ' +
+                'JOIN ' +
+                'students ON product_members.student_id = students.student_id ' +
+                'WHERE ' +
+                'products.product_id=1';
+
+            connection.query(query_for_menbers, (err, menber) => {
+                let menbers = [];
+                for (let item of menber) {
+                    let items = {};
+                    items = {
+                        student_id: item.student_id,
+                        student_name: item.name,
+                        student_class: item.class
+                    };
+                    if (item.leader_flg === 1) {
+                        items.leader_flg = true;
+                    }
+                    menbers.push(items);
+                }
+                product.menbers = menbers;
+                res.set('Content-Type', 'application/json; charset=utf-8');
+                res.json(product);
+            });
         });
     });
 });
