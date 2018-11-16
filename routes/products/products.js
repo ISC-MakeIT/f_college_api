@@ -18,6 +18,7 @@ router.get('/', (req, res) => {
         'products.genre, ' +
         'products.entry_order, ' +
         'products.product_number, ' +
+        'students.student_id, ' +
         'students.name, ' +
         'students.class, ' +
         'photos.photo_path, ' +
@@ -41,11 +42,14 @@ router.get('/', (req, res) => {
                 title: item.title,
                 head_shot: item.photo_path,
                 owner: {
+                    student_id: item.student_id,
                     profile_photo: item.profile_photo_path,
                     student_name: item.name,
-                    student_class: item.class
+                    student_class: item.class,
+                    leader_flg: false,
                 }
             };
+
             if (item.genre === 'BEAUTY') {
                 beauty_products.push(items);
             }
@@ -73,18 +77,13 @@ router.get('/:id', (req, res) => {
     query_for_products = mysql.format(query_for_products, req.params.id);
 
     connection.query(query_for_products, (err, caption) => {
-        let captions = [];
-        let items = {};
-        for (let item of caption) {
-            items = {
-                product_id: item.product_id,
-                genre: item.genre,
-                theme: item.theme,
-                concept: item.concept
-            };
-            captions.push(items);
-        }
-        product.caption = captions;
+        product = {
+            product_id: caption[0].product_id,
+            genre: caption[0].genre,
+            theme: caption[0].theme,
+            concept: caption[0].concept
+        };
+
         let query_for_photos = 'SELECT ' +
             'products.product_id, ' +
             'photos.photo_path ' +
@@ -102,10 +101,12 @@ router.get('/:id', (req, res) => {
                 photos.push(item.photo_path);
             }
             product.photos = photos;
-            let query_for_menbers = 'SELECT ' +
+
+            let query_for_members = 'SELECT ' +
                 'products.product_id, ' +
                 'product_members.student_id, ' +
                 'students.name,students.class, ' +
+                'profile_photos.profile_photo_path, ' +
                 'product_members.leader_flg ' +
                 'FROM ' +
                 'products ' +
@@ -113,25 +114,29 @@ router.get('/:id', (req, res) => {
                 'product_members ON products.product_id = product_members.product_id ' +
                 'JOIN ' +
                 'students ON product_members.student_id = students.student_id ' +
+                'JOIN profile_photos ON products.product_id = profile_photos.product_id ' +
                 'WHERE ' +
                 'products.product_id= ?';
-            query_for_menbers = mysql.format(query_for_menbers, req.params.id);
+            query_for_members = mysql.format(query_for_members, req.params.id);
 
-            connection.query(query_for_menbers, (err, menber) => {
-                let menbers = [];
-                for (let item of menber) {
+            connection.query(query_for_members, (err, member) => {
+                let members = [];
+                for (let item of member) {
                     let items = {};
                     items = {
                         student_id: item.student_id,
+                        profile_photo: item.profile_photo_path,
                         student_name: item.name,
-                        student_class: item.class
+                        student_class: item.class,
+                        leader_flg: false,
                     };
                     if (item.leader_flg === 1) {
                         items.leader_flg = true;
                     }
-                    menbers.push(items);
+                    members.push(items);
                 }
-                product.menbers = menbers;
+                product.members = members;
+
                 res.set('Content-Type', 'application/json; charset=utf-8');
                 res.json(product);
             });
