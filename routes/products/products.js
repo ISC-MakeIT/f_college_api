@@ -46,7 +46,7 @@ router.get('/', (req, res) => {
                     profile_photo: item.profile_photo_path,
                     student_name: item.name,
                     student_class: item.class,
-                    leader_flg: null,
+                    leader_flg: false,
                 }
             };
 
@@ -128,7 +128,7 @@ router.get('/:id', (req, res) => {
                         profile_photo: item.profile_photo_path,
                         student_name: item.name,
                         student_class: item.class,
-                        leader_flg: null,
+                        leader_flg: false,
                     };
                     if (item.leader_flg === 1) {
                         items.leader_flg = true;
