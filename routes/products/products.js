@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const connection = require('../../dbConnection');
-const scheme = require('./Scheme');
+const scheme = require('./scheme');
 
 // https://fc-fb-live.com/api/products/
 router.get('/', (req, res) => {
