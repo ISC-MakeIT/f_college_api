@@ -1,7 +1,7 @@
 const Scheme = require('../module/scheme');
 
 const scheme = {
-    '/': {
+    '/:id': {
         'POST': {
             'query': 'UPDATE ?? SET ?? = ?? + 1 WHERE ?? = ?',
             'table': ['vote', 'number_of_votes', 'number_of_votes', 'product_id']
@@ -14,8 +14,8 @@ const scheme = {
 };
 
 module.exports = {
-    '/': {
-        'POST': (param) => { return new Scheme(scheme['/'].POST.query, scheme['/'].POST.table, param); },
-        'DELETE': (param) => {return new Scheme(scheme['/'].DELETE.query, scheme['/'].DELETE.table, param); }
+    '/:id': {
+        'POST': (param) => { return new Scheme(scheme['/:id'].POST.query, scheme['/:id'].POST.table, param); },
+        'DELETE': (param) => {return new Scheme(scheme['/:id'].DELETE.query, scheme['/:id'].DELETE.table, param); }
     }
 };
