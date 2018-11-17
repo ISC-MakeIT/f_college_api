@@ -1,4 +1,4 @@
-const Scheme = require('../module/scheme');
+const Scheme = require('../module/Scheme');
 
 const scheme = {
     '/:id': {
