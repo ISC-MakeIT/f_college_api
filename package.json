@@ -6,7 +6,7 @@
     "start": "node ./bin/www",
     "lint": "eslint *.js",
     "fix": "npx eslint **/*.js --fix",
-    "demon": "./node_modules/.bin/nodemon ./bin/www"
+    "nodemon": "./node_modules/.bin/nodemon ./bin/www"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
