@@ -29,7 +29,7 @@ router.get('/', (req, res) => {
                         profile_photo: item.profile_photo_path,
                         student_name: item.name,
                         student_class: item.class,
-                        leader_flg: false
+                        leader_flg: true
                     }
                 };
                 if (item.genre === 'BEAUTY') {

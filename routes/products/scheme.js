@@ -15,9 +15,7 @@ const scheme = {
                 'products.product_id', 'students', 'products.leader_id', 
                 'students.student_id', 
                 [
-                    'products.product_id', 'products.genre', 'products.entry_order', 
-                    'products.product_number', 'students.student_id', 'students.name', 
-                    'students.class', 'photos.photo_path', 'profile_photos.profile_photo_path'
+                    'products.product_id'
                 ], 
                 'products.genre', 'products.entry_order'
             ]
