@@ -147,23 +147,27 @@ p {
     .component.product .product-creator .owner-name {
       font-size: 3.9vmin;
       color: #615561;
-      font-weight: 600; }
+      font-weight: 600;
+      width: 30vmin;
+      overflow: hidden;
+      white-space: nowrap; }
     .component.product .product-creator .profile_image {
       width: 10vmin;
       height: 10.5vmin;
       border-radius: 50%;
-      margin: 0 auto 1vmin; }
+      margin: 0 auto 1vmin;
+      object-fit: cover; }
     .component.product .product-creator .concept {
       font-weight: 800;
       font-size: 1.8rem; }
   .component.product .likes-count {
     position: relative;
-    bottom: 19.5vmin;
+    bottom: 19vmin;
     background-color: #31282c;
     border-radius: 0 0 1.3vmin 1.3vmin;
     color: #ababab;
-    height: 4.5vmin;
-    line-height: 4.5vmin;
+    height: 4vmin;
+    line-height: 4vmin;
     font-size: 2.7vmin;
     padding-left: 1.8vmin;
     padding-top: 0;
@@ -299,7 +303,8 @@ footer {
     width: 15vmin;
     height: auto;
     border-radius: 50%;
-    border: 1px solid #f4f4f4; }
+    border: 1px solid #f4f4f4;
+    object-fit: cover; }
   .component.product_votes_list .main_sub_list span {
     font-weight: 600;
     display: block; }
@@ -562,14 +567,17 @@ footer {
     width: 100vw; }
   .screen.product-show .product-img {
     object-fit: cover;
-    object-position: 0% 0%;
+    object-position: 50% 0%;
     overflow: hidden;
     width: 100vw;
     height: 65vh;
     max-height: auto; }
   .screen.product-show .sub-images-container {
     overflow-y: overlay;
-    width: auto; }
+    width: auto;
+    background-color: #F4F4F4; }
+    .screen.product-show .sub-images-container img {
+      object-fit: cover; }
     .screen.product-show .sub-images-container .img-container.cover {
       background-color: #31282C; }
     .screen.product-show .sub-images-container .img {
@@ -581,7 +589,7 @@ footer {
   .screen.product-show .product-container {
     color: #31282C;
     padding: 0; }
-    .screen.product-show .product-container h2 {
+    .screen.product-show .product-container h3 {
       font-size: 10vmin;
       margin: 7vmin auto 5vmin;
       font-family: "Allura", cursive;
@@ -611,7 +619,8 @@ footer {
     .screen.product-show .product-container .owner-img {
       width: 15.5vmin;
       height: 15.5vmin;
-      border-radius: 50%; }
+      border-radius: 50%;
+      object-fit: cover; }
   .screen.product-show .bottom {
     text-align: center; }
   .screen.product-show .vote-button {
