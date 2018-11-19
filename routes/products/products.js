@@ -4,6 +4,7 @@ const router = express.Router();
 const connection = require('../../dbConnection');
 const scheme = require('./scheme');
 
+
 // https://fc-fb-live.com/api/products/
 router.get('/', (req, res) => {
     let products = {};
@@ -12,7 +13,7 @@ router.get('/', (req, res) => {
     const table = scheme['/'].GET().getTable();
 
     connection.promise().query(query, table)
-        .then(([rows, fileds]) => {
+        .then(([rows, fields]) => {
             let fashion_products = [];
             let beauty_products = [];
             let items = {};
