@@ -57,8 +57,8 @@ router.get("/:id", (req, res) => {
 	let product = {};
 	let id = req.params.id;
 
-	const productQuery = scheme["/:id"].GET[1](id).getQuery();
-	const productTable = scheme["/:id"].GET[1](id).getTable();
+	const productQuery = scheme["/:id"].GET[1]([id]).getQuery();
+	const productTable = scheme["/:id"].GET[1]([id]).getTable();
 
 	connection.promise().query(productQuery, productTable)
 		.then(([captions, fields]) => {
@@ -72,10 +72,10 @@ router.get("/:id", (req, res) => {
 		.catch((err) => {
 			console.error(`DB Error:${err}`);
 			res.status(500).send("DB Error, failed to get product info. please check log file");
-		});
+        });
 
-	const photoQuery = scheme["/:id"].GET[2](id).getQuery();
-	const photoTable = scheme["/:id"].GET[2](id).getTable();
+	const photoQuery = scheme["/:id"].GET[2]([id, process.env.SHOW_PRODUCT_IMAGE]).getQuery();
+    const photoTable = scheme["/:id"].GET[2]([id, process.env.SHOW_PRODUCT_IMAGE]).getTable();
 
 	connection.promise().query(photoQuery, photoTable)
 		.then(([photo, fields]) => {
@@ -90,8 +90,8 @@ router.get("/:id", (req, res) => {
 			res.status(500).send("DB Error, failed to get photo info. please check log file");
 		});
 
-	const membersQuery = scheme["/:id"].GET[3](id).getQuery();
-	const membersTable = scheme["/:id"].GET[3](id).getTable();
+	const membersQuery = scheme["/:id"].GET[3]([id]).getQuery();
+	const membersTable = scheme["/:id"].GET[3]([id]).getTable();
 
 	connection.promise().query(membersQuery, membersTable)
 		.then(([member, fields]) => {

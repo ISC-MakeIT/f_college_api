@@ -1,6 +1,5 @@
 module.exports = class Scheme {
-    constructor(query, table, ...param) {
-
+    constructor(query, table, param) {
         this.getQuery = () => {
             return query;
         };

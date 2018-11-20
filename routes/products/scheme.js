@@ -3,7 +3,7 @@ const Scheme = require('../module/Scheme');
 const scheme = {
     '/': {
         'GET': {
-            'query': 'SELECT ?? FROM ?? JOIN ?? ON ?? = ?? JOIN ?? ON ?? = ?? JOIN ?? ON ?? = ?? AND ?? != ? GROUP BY ?? ORDER BY ?? DESC, ?? ASC',
+            'query': 'SELECT ?? FROM ?? JOIN ?? ON ?? = ?? JOIN ?? ON ?? = ?? JOIN ?? ON ?? = ?? AND ?? = ? GROUP BY ?? ORDER BY ?? DESC, ?? ASC',
             'table': [
                 [
                     'products.product_id', 'products.genre', 'products.entry_order', 
@@ -31,13 +31,16 @@ const scheme = {
                 ]
             },
             2: {
-                'query': 'SELECT ?? FROM ?? JOIN ?? ON ?? = ?? WHERE ?? = ?',
+                'query': 'SELECT ?? FROM ?? JOIN ?? ON ?? = ?? WHERE ?? = ? AND (?? = ? OR ?? = ?)',
                 'table': [
                     [
                         'products.product_id', 'photos.photo_path'
                     ],
                     'products', 'photos', 'products.product_id', 
-                    'photos.product_id', 'products.product_id', '?'
+                    'photos.product_id', 'products.product_id', '?', 
+                    'photos.product_image', '0', 'photos.product_image', 
+                    '?'
+
                 ]
             },
             3: {
