@@ -1,6 +1,6 @@
 .env
 package-lock.json
-
+yarn.lock
 
 .DS_Store
 .AppleDouble
