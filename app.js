@@ -21,6 +21,9 @@ app.use('/api/products', ProductsRouter);
 const VoteRouter = require('./routes/vote/vote.js');
 app.use('/api/vote', VoteRouter);
 
+const RankingRouter = require('./routes/ranking/ranking.js');
+app.use('/api/ranking', RankingRouter);
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     next(createError(404));
