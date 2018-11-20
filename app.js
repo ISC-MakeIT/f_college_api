@@ -5,7 +5,7 @@ const logger = require('morgan');
 const cors = require('cors');
 const app = express();
 
-require("dotenv").config();
+require('dotenv').config();
 
 // application settings
 app.use(logger('dev'));
@@ -26,8 +26,8 @@ app.use('/api/products', ProductsRouter);
 const VoteRouter = require('./routes/vote/vote.js');
 app.use('/api/vote', VoteRouter);
 
-const SettingsRouter = require("./routes/settings/setting.js");
-app.use("/api/settings", SettingsRouter);
+const SettingsRouter = require('./routes/settings/setting.js');
+app.use('/api/settings', SettingsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

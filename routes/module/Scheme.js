@@ -6,7 +6,7 @@ module.exports = class Scheme {
 
         this.getTable = () => {
             return table.map((e) => {
-                if (e === "?") {
+                if (e === '?') {
                     let p = param[0];
                     param.shift();
                     return e = p;
