@@ -1,5 +1,5 @@
 module.exports = class Scheme {
-    constructor(query, table, param) {
+    constructor(query, table, params) {
         this.getQuery = () => {
             return query;
         };
@@ -7,8 +7,8 @@ module.exports = class Scheme {
         this.getTable = () => {
             return table.map((e) => {
                 if (e === '?') {
-                    let p = param[0];
-                    param.shift();
+                    let p = params[0];
+                    params.shift();
                     return e = p;
                 } else {
                     return e;
