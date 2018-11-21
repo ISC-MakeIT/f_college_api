@@ -16,7 +16,6 @@ router.post('/:id', (req, res) => {
 	
     connection.promise().query(query, table)
         .then((row) => {
-            console.log(row);
             console.log(`Increment vote:${id}`);
             res.header('Content-Type', 'application/json; charset=utf-8');
             res.status(200).send({

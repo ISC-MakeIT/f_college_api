@@ -3,21 +3,19 @@ const Scheme = require('../module/Scheme');
 const scheme = {
     '/': {
         'GET': {
-            'query': 'SELECT ?? FROM ?? JOIN ?? ON ?? = ?? JOIN ?? ON ?? = ?? JOIN ?? ON ?? = ?? GROUP BY ?? ORDER BY ?? DESC, ?? ASC',
+            'query': 'SELECT ?? FROM ?? JOIN ?? ON ?? = ?? JOIN ?? ON ?? = ?? JOIN ?? ON ?? = ?? AND ?? = ? GROUP BY ?? ORDER BY ?? DESC, ?? ASC',
             'table': [
                 [
                     'products.product_id', 'products.genre', 'products.entry_order', 
                     'products.product_number', 'students.student_id', 'students.name', 
-                    'students.class', 'photos.photo_path', 'profile_photos.profile_photo_path'
+                    'students.class', 'photos.photo_path', 'profile_photos.profile_photo_path', 
+                    'photos.product_image'
                 ], 
                 'photos', 'profile_photos', 'photos.product_id', 
                 'profile_photos.product_id', 'products', 'profile_photos.product_id', 
                 'products.product_id', 'students', 'products.leader_id', 
-                'students.student_id', 
-                [
-                    'products.product_id'
-                ], 
-                'products.genre', 'products.entry_order'
+                'students.student_id', 'photos.product_image', '?', 
+                'products.product_id', 'products.genre', 'products.entry_order'
             ]
         }
     },
@@ -29,17 +27,20 @@ const scheme = {
                     [
                         'products.product_id', 'products.genre', 'products.theme', 'products.concept'
                     ],
-                    'products', 'products.product_id'
+                    'products', 'products.product_id', '?'
                 ]
             },
             2: {
-                'query': 'SELECT ?? FROM ?? JOIN ?? ON ?? = ?? WHERE ?? = ?',
+                'query': 'SELECT ?? FROM ?? JOIN ?? ON ?? = ?? WHERE ?? = ? AND (?? = ? OR ?? = ?)',
                 'table': [
                     [
                         'products.product_id', 'photos.photo_path'
                     ],
                     'products', 'photos', 'products.product_id', 
-                    'photos.product_id', 'products.product_id'
+                    'photos.product_id', 'products.product_id', '?', 
+                    'photos.product_image', '0', 'photos.product_image', 
+                    '?'
+
                 ]
             },
             3: {
@@ -51,7 +52,7 @@ const scheme = {
                     'products', 'product_members', 'products.product_id',
                     'product_members.product_id', 'students', 'product_members.student_id',
                     'students.student_id', 'profile_photos', 'products.product_id',
-                    'profile_photos.product_id', 'products.product_id'
+                    'profile_photos.product_id', 'products.product_id', '?'
                 ]
             }
         }
