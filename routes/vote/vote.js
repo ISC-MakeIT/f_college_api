@@ -6,14 +6,19 @@ const router = express.Router({
 const connection = require('../../dbConnection');
 const scheme = require('./scheme');
 
+const mysql = require("mysql2");
+
 //投票API
 
 router.post('/:id', (req, res) => {
     const id = req.params.id;
 	
-    const query = scheme['/:id'].POST(id).getQuery();
-    const table = scheme['/:id'].POST(id).getTable();
-	
+    const query = scheme['/:id'].POST([id]).getQuery();
+    const table = scheme['/:id'].POST([id]).getTable();
+    
+    console.log(table);
+    console.log(mysql.format(query,table));
+
     connection.promise().query(query, table)
         .then((row) => {
             console.log(`Increment vote:${id}`);
@@ -31,8 +36,8 @@ router.post('/:id', (req, res) => {
 router.delete('/:id', (req, res) => {
     const id = req.params.id;
 
-    const query = scheme['/:id'].DELETE(id).getQuery();
-    const table = scheme['/:id'].DELETE(id).getTable();
+    const query = scheme['/:id'].DELETE([id]).getQuery();
+    const table = scheme['/:id'].DELETE([id]).getTable();
 
     connection.promise().query(query, table)
         .then((row) => {
