@@ -38,8 +38,8 @@ const scheme = {
                     ],
                     'products', 'photos', 'products.product_id', 
                     'photos.product_id', 'products.product_id', '?', 
-                    'photos.product_image', '0', 'photos.product_image', 
-                    '?'
+                    'photos.product_image', '?', 'photos.product_image', 
+                    '0'
 
                 ]
             },

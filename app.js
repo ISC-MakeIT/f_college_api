@@ -17,9 +17,6 @@ app.use(cors({
 }));
 
 // ルーティング先
-const indexRouter = require('./routes/index.js');
-app.use('/', indexRouter);
-
 const ProductsRouter = require('./routes/products/products.js');
 app.use('/api/products', ProductsRouter);
 
@@ -28,6 +25,9 @@ app.use('/api/vote', VoteRouter);
 
 const SettingsRouter = require('./routes/settings/setting.js');
 app.use('/api/settings', SettingsRouter);
+
+const indexRouter = require('./routes/index.js');
+app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
