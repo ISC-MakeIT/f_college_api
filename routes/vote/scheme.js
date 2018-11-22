@@ -4,11 +4,11 @@ const scheme = {
     '/:id': {
         'POST': {
             'query': 'UPDATE ?? SET ?? = ?? + 1 WHERE ?? = ?',
-            'table': ['vote', 'number_of_votes', 'number_of_votes', 'product_id']
+            'table': ['vote', 'number_of_votes', 'number_of_votes', 'product_id', '?']
         },
         'DELETE': {
             'query': 'UPDATE ?? SET ?? = ?? - 1 WHERE ?? = ?',
-            'table': ['vote', 'number_of_votes', 'number_of_votes', 'product_id']
+            'table': ['vote', 'number_of_votes', 'number_of_votes', 'product_id', '?']
         }
     }
 };
