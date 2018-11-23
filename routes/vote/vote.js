@@ -16,8 +16,8 @@ router.post('/:id', (req, res) => {
     const query = scheme['/:id'].POST([id]).getQuery();
     const table = scheme['/:id'].POST([id]).getTable();
     
-    console.log(table);
-    console.log(mysql.format(query,table));
+    // console.log(table);
+    // console.log(mysql.format(query,table));
 
     connection.promise().query(query, table)
         .then((row) => {
@@ -27,7 +27,7 @@ router.post('/:id', (req, res) => {
             });
         })
         .catch((err) => {
-            console.error(`DB Error:${err}`);
+            // console.error(`DB Error:${err}`);
             res.status(500).send(`DB Error,failed to vote ${id}. please check log file`);
         });
 });
@@ -46,7 +46,7 @@ router.delete('/:id', (req, res) => {
             });
         })
         .catch((err) => {
-            console.error(`DB Error:${err}`);
+            // console.error(`DB Error:${err}`);
             res.status(500).send(`DB Error,failed to remove vote ${id}. please check log file`);
         });
 });
