@@ -21,7 +21,6 @@ router.post('/:id', (req, res) => {
 
     connection.promise().query(query, table)
         .then((row) => {
-            console.log(`Increment vote:${id}`);
             res.header('Content-Type', 'application/json; charset=utf-8');
             res.status(200).send({
                 'message': `Success to vote ${id}`
@@ -41,7 +40,6 @@ router.delete('/:id', (req, res) => {
 
     connection.promise().query(query, table)
         .then((row) => {
-            console.log(`Decrement vote:${id}`);
             res.header('Content-Type', 'application/json; charset=utf-8');
             res.status(200).send({
                 'message': `Success to remove vote ${id}`
