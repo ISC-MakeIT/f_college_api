@@ -26,8 +26,8 @@ app.use('/api/vote', VoteRouter);
 const SettingsRouter = require('./routes/settings/setting.js');
 app.use('/api/settings', SettingsRouter);
 
-// const RankingRouter = require('./routes/ranking/ranking.js');
-// app.use('/api/ranking', RankingRouter);
+const RankingRouter = require('./routes/ranking/ranking.js');
+app.use('/api/ranking', RankingRouter);
 
 const indexRouter = require('./routes/index.js');
 app.use('/', indexRouter);
