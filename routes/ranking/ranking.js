@@ -1,12 +1,15 @@
-// const express = require('express');
-// const router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-// const connection = require('../../dbConnection');
-// // const scheme = require('./scheme');
-// const mysql = require("mysql2");
+const connection = require('../../dbConnection');
+// const scheme = require('./scheme');
+const mysql = require("mysql2");
 
-// // https://fc-fb-live.com/api/ranking
-// router.get('/', (req, res) => {
+// https://fc-fb-live.com/api/ranking
+router.get('/', (req, res) => {
+    res.send('ranking');
+});
+
 //   let product = {};
 //   const query_for_products = 'SELECT ' +
 //     'products.product_id, ' +
