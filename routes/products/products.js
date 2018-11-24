@@ -23,7 +23,7 @@ router.get('/', (req, res) => {
                     product_id: item.product_id,
                     entry_order: item.entry_order,
                     product_number: item.product_number,
-                    title: item.title,
+                    theme: item.theme,
                     head_shot: item.photo_path,
                     owner: {
                         student_id: item.student_id,
