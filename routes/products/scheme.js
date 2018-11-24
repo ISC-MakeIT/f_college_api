@@ -7,7 +7,7 @@ const scheme = {
             'table': [
                 [
                     'products.product_id', 'products.genre', 'products.entry_order', 
-                    'products.product_number', 'students.student_id', 'students.name', 
+                    'products.product_number', 'products.theme', 'students.student_id', 'students.name', 
                     'students.class', 'photos.photo_path', 'profile_photos.profile_photo_path', 
                     'photos.product_image'
                 ], 
