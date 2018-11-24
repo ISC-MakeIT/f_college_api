@@ -5,8 +5,8 @@ const app = express();
 app.use(express.static(path.join(__dirname, './public')));
 
 /* GET home page. */
-// router.get('*', function(req, res) {
-//     res.sendFile(path.join(__dirname,"../", "public", "index.html"));
-// });
+router.get('*', function(req, res) {
+    res.sendFile(path.join(__dirname,"../", "public", "index.html"));
+});
 
 module.exports = router;

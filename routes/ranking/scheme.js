@@ -1,18 +1,55 @@
 const Scheme = require('../module/Scheme');
 
 const scheme = {
-    '/:genre': {
+    '/:id': {
         'GET': {
-            // todo ジャンルを指定してtop10の順位、作品番号、作品名、代表者名、メンバー一覧、作品写真を取得する
-            // テストとしてただのselect を書く
-            'query': 'SELECT ?? FROM ?? WHERE ?? = ?',
-            'table': ['products.product_id', 'products', 'genre', 'fashion']
+            1: {
+                'query': 'SELECT ?? FROM ?? WHERE ?? = ?',
+                'table': [
+                    [
+                        'products.product_id', 'products.genre', 'products.theme', 'products.concept'
+                    ],
+                    'products', 'products.product_id', '?'
+                ]
+            },
+            2: {
+                'query': 'SELECT ?? FROM ?? JOIN ?? ON ?? = ?? WHERE ?? = ? AND (?? = ? OR ?? = ?)',
+                'table': [
+                    [
+                        'products.product_id', 'photos.photo_path'
+                    ],
+                    'products', 'photos', 'products.product_id', 
+                    'photos.product_id', 'products.product_id', '?', 
+                    'photos.product_image', '?', 'photos.product_image', 
+                    '0'
+
+                ]
+            },
+            3: {
+                'query': 'SELECT ?? FROM ?? JOIN ?? ON ?? = ?? JOIN ?? ON ?? = ?? JOIN ?? ON ?? = ?? WHERE ?? = ?',
+                'table': [
+                    [
+                        'products.product_id', 'product_members.student_id', 'students.name', 'students.class', 'profile_photos.profile_photo_path', 'product_members.leader_flg'
+                    ],
+                    'products', 'product_members', 'products.product_id',
+                    'product_members.product_id', 'students', 'product_members.student_id',
+                    'students.student_id', 'profile_photos', 'products.product_id',
+                    'profile_photos.product_id', 'products.product_id', '?'
+                ]
+            }
         }
     }
 };
 
 module.exports = {
-    '/:genre': {
-        'GET': (param) => { return new Scheme(scheme['/:genre'].GET.query, scheme['/:genre'].GET.table, param); }
+    '/': {
+        'GET': (param) => { return new Scheme(scheme['/'].GET.query, scheme['/'].GET.table, param); }
+    },
+    '/:id': {
+        'GET': {
+            1: (param) => {return new Scheme(scheme['/:id'].GET[1].query, scheme['/:id'].GET[1].table, param); },
+            2: (param) => {return new Scheme(scheme['/:id'].GET[2].query, scheme['/:id'].GET[2].table, param); },
+            3: (param) => {return new Scheme(scheme['/:id'].GET[3].query, scheme['/:id'].GET[3].table, param); }
+        } 
     }
 };
