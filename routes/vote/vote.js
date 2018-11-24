@@ -6,8 +6,6 @@ const router = express.Router({
 const connection = require('../../dbConnection');
 const scheme = require('./scheme');
 
-const mysql = require("mysql2");
-
 //投票API
 
 router.post('/:id', (req, res) => {
